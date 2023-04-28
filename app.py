@@ -4,6 +4,7 @@ import streamlit as st
 from utils import html_temp
 from utils import dec_temp
 from utils import markdown_text
+from utils import markdown_text1
 from eda_app import run_eda_app
 from ml_app import run_ml_app
 from utils import p_lans
@@ -40,10 +41,16 @@ def main():
             </style>
         """, unsafe_allow_html=True)
         st.markdown("<h2 style='font-size: 24px; color: black;'>🔍 파킨슨병 대회개요</h2>", unsafe_allow_html=True)
-        st.markdown("<h3><span style='font-size: 16px; color: black;'>👉 </span><span style='font-size: 16px; color: black;'>파킨슨병 환자의 단백질 및 펩타이드 데이터 측정을 사용하여 질병의 진행을 예측합니다.</span></h3>",
-                    unsafe_allow_html=True)
+        # st.markdown("<h3><span style='font-size: 16px; color: black;'>👉 </span><span style='font-size: 16px; color: black;'>파킨슨병 환자의 단백질 및 펩타이드 데이터 측정을 사용하여 질병의 진행을 예측합니다.</span></h3>",
+        #             unsafe_allow_html=True)
+        show_info1 = st.checkbox('더보기', key='unique_key')
+        if show_info1:
+            st.info(markdown_text1)
         st.markdown("<h4 style='font-size: 24px; color: black;'>🔬 파킨슨병 연구배경</h2>", unsafe_allow_html=True)
-        st.info(markdown_text)
+
+        show_info = st.checkbox('더보기')
+        if show_info:
+            st.info(markdown_text)
 
     elif choice == 'EDA':
         run_eda_app()
@@ -51,9 +58,7 @@ def main():
         run_ml_app()
     else:
         st.subheader('About')
-        # Multiple selection
-        lans = ["Python", "HTML", "CSS"]
-        myChoice = st.multiselect("💻 사용한 언어", lans, default=["Python", "HTML", "CSS"])
+
 
 
 if __name__ == "__main__":
