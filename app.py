@@ -1,13 +1,13 @@
 # -*- coding:UTF-8 -*-
-
+import sys
+sys.path.append('/path/to/utils/')
 import streamlit as st
+from utils import p_lans
 from utils import html_temp
-from utils import dec_temp
 from utils import markdown_text
 from utils import markdown_text1
 from eda_app import run_eda_app
 from ml_app import run_ml_app
-from utils import p_lans
 
 def main():
     # st.markdown(html_temp, unsafe_allow_html=True)
