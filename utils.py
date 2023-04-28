@@ -38,7 +38,7 @@ html_temp = """
 </table>
 """
 
-markdown_text1 = '''
+markdown_info = '''
 파킨슨병 환자의 단백질 및 펩타이드 데이터 측정을 사용하여 질병의 진행을 예측합니다.
 '''
 
