@@ -46,7 +46,7 @@ def main():
             st.info(markdown_info)
         st.markdown("<h4 style='font-size: 24px; color: black;'>🔬 파킨슨병 연구배경</h2>", unsafe_allow_html=True)
 
-        show_info = st.checkbox('더보기', key='unique_key')
+        show_info = st.checkbox('더보기', key='my_checkbox')
         if show_info:
             st.info(markdown_text)
 
