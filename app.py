@@ -43,8 +43,8 @@ def main():
         st.markdown("<h2 style='font-size: 24px; color: black;'>🔍 파킨슨병 대회개요</h2>", unsafe_allow_html=True)
         # st.markdown("<h3><span style='font-size: 16px; color: black;'>👉 </span><span style='font-size: 16px; color: black;'>파킨슨병 환자의 단백질 및 펩타이드 데이터 측정을 사용하여 질병의 진행을 예측합니다.</span></h3>",
         #             unsafe_allow_html=True)
-        show_info1 = st.checkbox('더보기', key='unique_key')
-        if show_info1:
+        show_info = st.checkbox('더보기', key='unique_checkbox_key')
+        if show_info:
             st.info(markdown_text1)
         st.markdown("<h4 style='font-size: 24px; color: black;'>🔬 파킨슨병 연구배경</h2>", unsafe_allow_html=True)
 
