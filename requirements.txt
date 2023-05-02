@@ -7,4 +7,4 @@ plotly
 streamlit
 lightgbm
 tqdm
-streamlit-option-menu
+streamlit_option_menu
