@@ -63,7 +63,7 @@ def main():
             """
         )
 
-        # sns
+        # Link
         c1, c2, c3 = st.columns(3)
         with c1:
             st.info('**Data Analyst: [@Sung](https://muhanyuljung.tistory.com/)**', icon="💡")
