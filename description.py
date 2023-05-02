@@ -46,9 +46,6 @@ CSF samples contain protein information as well as protein subcomponent informat
                 "- $F_t$ is the forecast value of the target for instance \n"
                 "- $A_t$ is the actual value of the target for instance \n"
                 )
-    with st.expander("#### Competition Info"):
-        st.markdown("***More information*** \n"
-                "\n LINK : [AMP®-Parkinson's Disease Progression Prediction](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction)")
 
     st.write('<hr>', unsafe_allow_html=True)
 
