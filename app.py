@@ -16,7 +16,7 @@ def main():
     with st.sidebar:
         selected = option_menu("Main Menu", ['Home', 'Description', 'Data', 'EDA', 'STAT'],
                 icons=['house', 'card-checklist', 'card-checklist', 'bar-chart', 'clipboard-data'],
-                menu_icon="cast", default_index=1, orientation = 'vertical')
+                menu_icon="cast", default_index=0, orientation = 'vertical')
 
     if selected == 'Home':
         st.markdown("<h1 style='text-align: center; color: darkblue;'>AMP®-Parkinson's </span><span style='text-align: center; color: darkmagenta;'>Disease Progression Prediction</span>",

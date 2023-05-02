@@ -1,5 +1,6 @@
 # -*- coding:utf-8 -*-
 import streamlit as st
+from PIL import Image
 
 def run_description():
     st.markdown(
@@ -31,6 +32,23 @@ Predict the UPDRS score for Parts 1 - 4 for each month in which they are assesse
 The main feature provided by the competition for prediction is mass spectrometry readings of cerebrospinal fluid (CSF) samples taken from the patient over multiple months. 
 CSF samples contain protein information as well as protein subcomponent information in the form of peptide chains.
         """)
+
+    st.write('<hr>', unsafe_allow_html=True)
+
+    st.markdown("#### Evaluation \n"
+                "- The evaluation metric for this competition is Symmetric Mean Absolute Percentage Error. \n")
+    st.latex(r'''
+    {SMAPE} = \frac{100}{n} \sum_{t=1}^n \frac{\left|F_t-A_t\right|}{(|A_t|+|F_t|)/2}
+    ''')
+    st.markdown("where: \n"
+                "- $n$ is the number of fitted points \n"
+                "- $t$ is the fitted point \n"
+                "- $F_t$ is the forecast value of the target for instance \n"
+                "- $A_t$ is the actual value of the target for instance \n"
+                )
+    with st.expander("#### Competition Info"):
+        st.markdown("***More information*** \n"
+                "\n LINK : [AMP®-Parkinson's Disease Progression Prediction](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction)")
 
     st.write('<hr>', unsafe_allow_html=True)
 
