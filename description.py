@@ -6,35 +6,38 @@ def run_description():
         "<h1 style='text-align: center; color: darkblue;'>Parkinson's </span><span style='text-align: center; color: darkmagenta;'>Description</span>",
         unsafe_allow_html=True)
 
-    submenu = st.sidebar.selectbox("Submenu", ["Parkinson's disease", 'Protein', 'Peptide', 'Protein VS Peptide', 'Levodopa', 'Cerebrospinal fluid'])
-    if submenu == "Parkinson's disease":
-        st.markdown("#### Parkinson's disease")
-        st.markdown(
-            """
-            ***What is Parkinson's disease?*** \n
-            \n Parkinson's disease is a neurodegenerative disease caused by the degeneration of dopamine nerve cells in the substantia nigra of the midbrain, resulting in the inability to release dopamine normally. 
-            The main symptoms are tremor (shaking), muscle stiffness, and movement disorders such as bradykinesia (slowed movement) and postural instability. 
-            Without proper treatment, movement disorders can become progressive, making it difficult to walk and unable to perform activities of daily living. 
-            Parkinson's disease primarily affects older adults, and the risk of developing the disease increases with age.
-            """)
+    st.markdown("#### Parkinson's disease")
+    st.markdown(
+        """
+        ***What is Parkinson's disease?*** \n
+        \n Parkinson's disease is a neurodegenerative disease caused by the degeneration of dopamine nerve cells in the substantia nigra of the midbrain, resulting in the inability to release dopamine normally. 
+        The main symptoms are tremor (shaking), muscle stiffness, and movement disorders such as bradykinesia (slowed movement) and postural instability. 
+        Without proper treatment, movement disorders can become progressive, making it difficult to walk and unable to perform activities of daily living. 
+        Parkinson's disease primarily affects older adults, and the risk of developing the disease increases with age.
+        """)
 
-        st.write('<hr>', unsafe_allow_html=True)
+    st.write('<hr>', unsafe_allow_html=True)
 
-        st.markdown("#### Parkinson's Disease Rating Scale (MDS-UPDRS)")
-        st.markdown("***What is Parkinson's Disease Rating Scale?*** \n"
-            "- Part I - Non-motor aspects of daily living experiences \n"
-            "- Part II - Motor Aspects of Daily Living Experiences \n"
-            "- Part III - Motor Testing \n"
-            "- Part IV - Motor complications \n"
-            """
-    Questions in each part are scored on a 5-point scale ranging from 0 (normal) to 4 (most severe disability). 
-    The maximum score a patient can receive is 272 points. The challenge for this competition is for patients to visit their doctor and complete 
-    Predict the UPDRS score for Parts 1 - 4 for each month in which they are assessed. 
-    The main feature provided by the competition for prediction is mass spectrometry readings of cerebrospinal fluid (CSF) samples taken from the patient over multiple months. 
-    CSF samples contain protein information as well as protein subcomponent information in the form of peptide chains.
-            """)
+    st.markdown("#### Parkinson's Disease Rating Scale (MDS-UPDRS)")
+    st.markdown("***What is Parkinson's Disease Rating Scale?*** \n"
+        "- Part I - Non-motor aspects of daily living experiences \n"
+        "- Part II - Motor Aspects of Daily Living Experiences \n"
+        "- Part III - Motor Testing \n"
+        "- Part IV - Motor complications \n"
+        """
+Questions in each part are scored on a 5-point scale ranging from 0 (normal) to 4 (most severe disability). 
+The maximum score a patient can receive is 272 points. The challenge for this competition is for patients to visit their doctor and complete 
+Predict the UPDRS score for Parts 1 - 4 for each month in which they are assessed. 
+The main feature provided by the competition for prediction is mass spectrometry readings of cerebrospinal fluid (CSF) samples taken from the patient over multiple months. 
+CSF samples contain protein information as well as protein subcomponent information in the form of peptide chains.
+        """)
 
-    elif submenu == 'Protein':
+    st.write('<hr>', unsafe_allow_html=True)
+
+    submenu = st.selectbox("Submenu", ['Protein', 'Peptide', 'Protein VS Peptide', 'Levodopa', 'Cerebrospinal fluid'])
+
+
+    if submenu == 'Protein':
         st.markdown("#### Protein")
         st.markdown("***What is Protein?*** \n"
         """
@@ -52,10 +55,10 @@ def run_description():
     elif submenu == 'Protein VS Peptide':
         st.markdown("#### Protein VS Peptide")
         st.markdown("***Protein VS Peptide*** \n"
-        """
-        Peptides are composed of 2-50 amino acid chains, while proteins are composed of 50 or more amino acid chains.
-        In other words, peptides are short chains of amino acids. 
-        """)
+    """
+Peptides are composed of 2-50 amino acid chains, while proteins are composed of 50 or more amino acid chains.
+In other words, peptides are short chains of amino acids. 
+    """)
 
     elif submenu == 'Levodopa':
         st.markdown("#### Levodopa (Levodopa)")
