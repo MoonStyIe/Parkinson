@@ -34,7 +34,7 @@ CSF samples contain protein information as well as protein subcomponent informat
 
     st.write('<hr>', unsafe_allow_html=True)
 
-    submenu = st.selectbox("Submenu", ['Protein', 'Peptide', 'Protein VS Peptide', 'Levodopa', 'Cerebrospinal fluid'])
+    submenu = st.selectbox("⏏️ DATA SELECT", ['Protein', 'Peptide', 'Protein VS Peptide', 'Levodopa', 'Cerebrospinal fluid'])
 
 
     if submenu == 'Protein':
