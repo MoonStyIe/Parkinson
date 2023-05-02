@@ -4,9 +4,10 @@ from PIL import Image
 import numpy as np
 import pandas as pd
 from description import run_description
-from eda_app import run_eda
+from data import run_data
 from ml_app import run_ml_app
 from streamlit_option_menu import option_menu
+from eda_app import run_eda
 
 # Confit
 st.set_page_config(page_title='Parkinson Disease Progression Prediction', page_icon=':medical_symbol:')
@@ -76,7 +77,7 @@ def main():
     elif selected == 'Description':
         run_description()
     elif selected == 'Data':
-        pass
+        run_data()
     elif selected == 'EDA':
         run_eda()
     elif selected == 'STAT':
