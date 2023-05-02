@@ -22,14 +22,18 @@ def main():
     choice = st.sidebar.selectbox('Menu', menu)
 
     if choice == 'INTRODUCE':
+        # st.markdown(
+        #     "<h1 span  center; style='text-align:color: darkblue;'>AMP®-Parkinson's </span><span style='text-align: center; color: darkmagenta;'>Disease Progression Prediction</span>",
+        #     unsafe_allow_html=True)
+
         st.markdown(
-            "<h1 span style='text-align: center; color: darkblue;'>AMP®-Parkinson's </span><span style='text-align: center; color: darkmagenta;'>Disease Progression Prediction</span>",
+            "<h1 span  center; style='text-align:color: darkblue;'>AMP®-Parkinson's </span><span style='text-align: center; color: darkmagenta;'>Disease Progression Prediction</span>",
             unsafe_allow_html=True)
 
         # Tool
         c1, c2, c3, c4, c5 = st.columns(5)
         c1.image(Image.open('data/excel.png'))
-        c2.image(Image.open('data/power point.png'))
+        c2.image(Image.open('data/powerpoint.png'))
         c3.image(Image.open('data/kaggle.png'))
         c4.image(Image.open('data/python.png'))
         c5.image(Image.open('data/pycharm.png'))
@@ -45,26 +49,27 @@ def main():
             """
         )
 
+
         st.write('<hr>', unsafe_allow_html=True)
 
         st.markdown("<h4 style='font-size: 24px; color: black;'>🔬 Context</h2>", unsafe_allow_html=True)
         st.write(
             """
-    Parkinson’s disease (PD) is a disabling brain disorder that affects movements, cognition, sleep, and other normal functions. 
-    Unfortunately, there is no current cure—and the disease worsens over time. It's estimated that by 2037, 1.6 million people in the U.S. 
-    will have Parkinson’s disease, at an economic cost approaching $80 billion. 
-    Research indicates that protein or peptide abnormalities play a key role in the onset and worsening of this disease. 
-    Gaining a better understanding of this—with the help of data science—could provide important clues for the development of new pharmacotherapies to slow the progression or cure Parkinson’s disease.
-    
-    Current efforts have resulted in complex clinical and neurobiological data on over 10,000 subjects for broad sharing with the research community. 
-    A number of important findings have been published using this data, but clear biomarkers or cures are still lacking.
-    
-    Competition host, the Accelerating Medicines Partnership® Parkinson’s Disease (AMP®PD), is a public-private partnership between government, industry, 
-    and nonprofits that is managed through the Foundation of the National Institutes of Health (FNIH). The Partnership created the AMP PD Knowledge Platform, 
-    which includes a deep molecular characterization and longitudinal clinical profiling of Parkinson’s disease patients, with the goal of identifying and validating diagnostic, 
-    prognostic, and/or disease progression biomarkers for Parkinson’s disease.
-    
-    Your work could help in the search for a cure for Parkinson’s disease, which would alleviate the substantial suffering and medical care costs of patients with this disease.
+            Parkinson’s disease (PD) is a disabling brain disorder that affects movements, cognition, sleep, and other normal functions. 
+            Unfortunately, there is no current cure—and the disease worsens over time. It's estimated that by 2037, 1.6 million people in the U.S. 
+            will have Parkinson’s disease, at an economic cost approaching $80 billion. 
+            Research indicates that protein or peptide abnormalities play a key role in the onset and worsening of this disease. 
+            Gaining a better understanding of this—with the help of data science—could provide important clues for the development of new pharmacotherapies to slow the progression or cure Parkinson’s disease.
+            
+            Current efforts have resulted in complex clinical and neurobiological data on over 10,000 subjects for broad sharing with the research community. 
+            A number of important findings have been published using this data, but clear biomarkers or cures are still lacking.
+            
+            Competition host, the Accelerating Medicines Partnership® Parkinson’s Disease (AMP®PD), is a public-private partnership between government, industry, 
+            and nonprofits that is managed through the Foundation of the National Institutes of Health (FNIH). The Partnership created the AMP PD Knowledge Platform, 
+            which includes a deep molecular characterization and longitudinal clinical profiling of Parkinson’s disease patients, with the goal of identifying and validating diagnostic, 
+            prognostic, and/or disease progression biomarkers for Parkinson’s disease.
+            
+            Your work could help in the search for a cure for Parkinson’s disease, which would alleviate the substantial suffering and medical care costs of patients with this disease.
             """
         )
 
