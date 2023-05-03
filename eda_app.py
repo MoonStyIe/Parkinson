@@ -143,8 +143,8 @@ def run_medication():
     fig.update_layout(
         xaxis_title="Visit Month",
         yaxis_title="Score",
-        height=600,
-        width=800
+        height=500,
+        width=700
     )
 
     fig.update_layout(
@@ -205,8 +205,8 @@ def run_medication2():
     fig.update_layout(
         xaxis_title="Visit Month",
         yaxis_title="Score",
-        height=600,
-        width=800
+        height=500,
+        width=700
     )
 
     st.plotly_chart(fig)
@@ -257,7 +257,7 @@ def run_medication3():
         xaxis_title="Visit Month",
         yaxis_title="Score",
         height=500,
-        width=800
+        width=700
     )
 
     st.plotly_chart(fig)
@@ -308,7 +308,7 @@ def run_medication4():
         xaxis_title="Visit Month",
         yaxis_title="Score",
         height=500,
-        width=800
+        width=700
     )
 
     st.plotly_chart(fig)
@@ -337,7 +337,7 @@ def distribution_updrs1():
 
     fig.update_layout(
         height=500,
-        width=800
+        width=700
     )
 
     st.plotly_chart(fig)
@@ -364,7 +364,7 @@ def distribution_updrs2():
 
     fig.update_layout(
         height=500,
-        width=800
+        width=700
     )
 
     st.plotly_chart(fig)
@@ -391,7 +391,7 @@ def distribution_updrs3():
 
     fig.update_layout(
         height=500,
-        width=800
+        width=700
     )
 
     st.plotly_chart(fig)
@@ -418,10 +418,127 @@ def distribution_updrs4():
 
     fig.update_layout(
         height=500,
-        width=800
+        width=700
     )
 
     st.plotly_chart(fig)
+
+def create_null_value_pie_charts():
+
+    target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
+
+    # target 의 결측치 정보를 담은 파생 변수 생성 - > target['null_count']
+    target['null_count'] = target.isnull().sum(axis=1)
+
+    # 위 작업을 train_peptides 데이터 셋에도 적용
+    train_peptides["null_count"] = train_peptides.isnull().sum(axis=1)
+
+    # 위 작업을 train_proteins 데이터 셋에도 적용
+    train_proteins["null_count"] = train_proteins.isnull().sum(axis=1)
+
+    # 위 작업을 supplemental_clinical_data 데이터 셋에도 적용
+    sup_target["null_count"] = sup_target.isnull().sum(axis=1)
+
+    # train_clinical_data 에 대한 null_count 정보를 담은 딕셔너리 생성
+    counts_train_clinical_data = target.groupby("null_count")["visit_id"].count().to_dict()
+    labels_train_clinical_data = ["{} Null Value(s)".format(k) for k in counts_train_clinical_data.keys()]
+    values_train_clinical_data = list(counts_train_clinical_data.values())
+
+    # train_peptides 에 대한 null_count 정보를 담은 딕셔너리 생성
+    counts_train_peptides = train_peptides.groupby("null_count")["visit_id"].count().to_dict()
+    labels_train_peptides = ["{} Null Value(s)".format(k) for k in counts_train_peptides.keys()]
+    values_train_peptides = list(counts_train_peptides.values())
+
+    # train_proteins 에 대한 null_count 정보를 담은 딕셔너리 생성
+    counts_train_proteins = train_proteins.groupby("null_count")["visit_id"].count().to_dict()
+    labels_train_proteins = ["{} Null Value(s)".format(k) for k in counts_train_proteins.keys()]
+    values_train_proteins = list(counts_train_proteins.values())
+
+    # supplemental_clinical_data 에 대한 null_count 정보를 담은 딕셔너리 생성
+    counts_supplemental_clinical_data = sup_target.groupby("null_count")["visit_id"].count().to_dict()
+    labels_supplemental_clinical_data = ["{} Null Value(s)".format(k) for k in counts_supplemental_clinical_data.keys()]
+    values_supplemental_clinical_data = list(counts_supplemental_clinical_data.values())
+
+    # pie 차트를 그리는 함수 정의
+    def create_pie_chart(values, labels, title):
+        fig = go.Figure(data=[go.Pie(labels=labels, values=values, hole=.3)])
+        fig.update_layout(
+        title=title,
+        font=dict(size=16),
+        width=700,
+        height=500,
+        legend=dict(orientation="h")
+        )
+        return fig
+
+    st.markdown("<h2 style='text-align: center; color: darkblue;'>Null Value Analysis</span>", unsafe_allow_html=True)
+    st.markdown("<h4 style='text-align: center; color: darkmagenta;'>Clinical Data </span>", unsafe_allow_html=True)
+    fig1 = create_pie_chart(values_train_clinical_data, labels_train_clinical_data, title="Train Clinical Data Null Value Analysis")
+    st.plotly_chart(fig1)
+
+    st.markdown("<h4 style='text-align: center; color: darkmagenta;'>Supplemental Clinical Data </span>", unsafe_allow_html=True)
+    fig4 = create_pie_chart(values_supplemental_clinical_data, labels_supplemental_clinical_data, "Supplemental Clinical Data Null Value Analysis")
+    st.plotly_chart(fig4)
+
+def create_null_values_plot():
+    import plotly.express as px
+    import plotly.graph_objs as go
+    from plotly.subplots import make_subplots
+    target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
+
+    # target 의 결측치 정보를 담은 파생 변수 생성 - > target['null_count']
+    target['null_count'] = target.isnull().sum(axis=1)
+
+    null_count_labels = [target[(target["null_count"] == x)].isnull().sum().index[:-1] for x in range(1, 6)]
+
+    # 위의 null_count_labels와 같은 방식으로 null_count_values 리스트에는
+    # 1부터 5까지의 null_count값을 가진 데이터에서 각각의 특성들의 null값 개수를 저장한다.
+    null_count_values = [target[(target["null_count"] == x)].isnull().sum().values[:-1] for x in range(1, 6)]
+
+    # 그래프의 색상을 설정한다.
+    colors = ['#636EFA', '#EF553B', '#00CC96', '#AB63FA', '#FFA15A', '#19D3F3', '#FF6692', '#B6E880', '#FF97FF', '#FECB52']
+
+    # 그래프 객체를 생성한다.
+    fig = make_subplots(
+        rows=1, cols=4,  # 1행 4열로 설정
+        subplot_titles=(
+            "<span style='font-size: 12px'>Number of Rows With 1 Null</span>",  # 1개의 null 값을 가진 데이터
+            "<span style='font-size: 12px'>Number of Rows With 2 Nulls</span>",  # 2개의 null 값을 가진 데이터
+            "<span style='font-size: 12px'>Number of Rows With 3 Nulls</span>",  # 3개의 null 값을 가진 데이터
+            "<span style='font-size: 12px'>Number of Rows With 4 Nulls</span>"   # 4개의 null 값을 가진 데이터
+        )
+    )
+
+    # 1행 4열의 subplot에 각각 Bar 그래프를 추가한다.
+    for i in range(4):
+        fig.add_trace(
+            go.Bar(
+                x=null_count_labels[i],  # x축에 해당하는 값은 null_count_labels 리스트의 i번째 값으로 지정
+                y=null_count_values[i],  # y축에 해당하는 값은 null_count_values 리스트의 i번째 값으로 지정
+                text=null_count_values[i],  # Bar 그래프 상에 해당 값들을 나타낼 텍스트로 null_count_values 리스트의 i번째 값을 사용
+                textposition='auto',  # 텍스트를 어디에 위치시킬지를 지정. 'auto'는 그래프에 따라 자동으로 위치를 결정한다는 의미.
+                marker=dict(color=colors[:len(null_count_labels[i])]),  # 그래프의 색상을 colors 리스트에서 i번째까지만 사용해서 지정한다.
+                showlegend=False  # 라벨 제거
+            ),
+            row=1, col=i+1
+        )
+    fig.update_layout(
+        title="<b>Percentage of Missing Values by Category</b>",
+        font=dict(size=10, family="Roboto Mono"),
+        margin=dict(l=10, r=10, t=50, b=10),
+        height=250,
+        showlegend=False,
+        paper_bgcolor="white",
+        plot_bgcolor="white",
+        yaxis=dict(
+            title="Percentage of Missing Values",
+            tickformat=".1%",
+            range=[0, 1]
+        )
+    )
+    st.plotly_chart(fig)
+
+
 
 def run_eda():
     target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
@@ -446,6 +563,8 @@ def run_eda():
     elif submenu1 == 'Updrs-Medication 4':
         run_medication4()
 
+    st.markdown("<hr>", unsafe_allow_html=True)
+
     submenu2 = st.selectbox("⏏️ Updrs-Distribution", ['Updrs-Distribution 1', 'Updrs-Distribution 2', 'Updrs-Distribution 3', 'Updrs-Distribution 4'])
 
     if submenu2 == 'Updrs-Distribution 1':
@@ -456,6 +575,12 @@ def run_eda():
         distribution_updrs3()
     elif submenu2 == 'Updrs-Distribution 4':
         distribution_updrs4()
+
+    st.markdown("<hr>", unsafe_allow_html=True)
+
+    create_null_value_pie_charts()
+    create_null_values_plot()
+
 
 
 
