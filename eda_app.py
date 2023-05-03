@@ -472,11 +472,11 @@ def create_null_value_pie_charts():
         return fig
 
     st.markdown("<h2 style='text-align: center; color: darkblue;'>Null Value Analysis</span>", unsafe_allow_html=True)
-    st.markdown("<h4 style='text-align: center; color: darkmagenta;'>Clinical Data </span>", unsafe_allow_html=True)
+    st.markdown("<h4 style='text-align: center; color: black;'>Train Clinical Data </span>", unsafe_allow_html=True)
     fig1 = create_pie_chart(values_train_clinical_data, labels_train_clinical_data, title="Train Clinical Data Null Value Analysis")
     st.plotly_chart(fig1)
 
-    st.markdown("<h4 style='text-align: center; color: darkmagenta;'>Supplemental Clinical Data </span>", unsafe_allow_html=True)
+    st.markdown("<h4 style='text-align: center; color: black;'>Supplemental Clinical Data </span>", unsafe_allow_html=True)
     fig4 = create_pie_chart(values_supplemental_clinical_data, labels_supplemental_clinical_data, "Supplemental Clinical Data Null Value Analysis")
     st.plotly_chart(fig4)
 
@@ -502,10 +502,10 @@ def create_null_values_plot():
     fig = make_subplots(
         rows=1, cols=4,  # 1행 4열로 설정
         subplot_titles=(
-            "<span style='font-size: 12px'>Number of Rows With 1 Null</span>",  # 1개의 null 값을 가진 데이터
-            "<span style='font-size: 12px'>Number of Rows With 2 Nulls</span>",  # 2개의 null 값을 가진 데이터
-            "<span style='font-size: 12px'>Number of Rows With 3 Nulls</span>",  # 3개의 null 값을 가진 데이터
-            "<span style='font-size: 12px'>Number of Rows With 4 Nulls</span>"   # 4개의 null 값을 가진 데이터
+            "<span style='font-size: 10px'>Number of Rows With 1 Null</span>",  # 1개의 null 값을 가진 데이터
+            "<span style='font-size: 10px'>Number of Rows With 2 Nulls</span>",  # 2개의 null 값을 가진 데이터
+            "<span style='font-size: 10px'>Number of Rows With 3 Nulls</span>",  # 3개의 null 값을 가진 데이터
+            "<span style='font-size: 10px'>Number of Rows With 4 Nulls</span>"   # 4개의 null 값을 가진 데이터
         )
     )
 
@@ -526,7 +526,8 @@ def create_null_values_plot():
         title="<b>Percentage of Missing Values by Category</b>",
         font=dict(size=10, family="Roboto Mono"),
         margin=dict(l=10, r=10, t=50, b=10),
-        height=250,
+        width=700,
+        height=500,
         showlegend=False,
         paper_bgcolor="white",
         plot_bgcolor="white",
@@ -536,6 +537,7 @@ def create_null_values_plot():
             range=[0, 1]
         )
     )
+
     st.plotly_chart(fig)
 
 
