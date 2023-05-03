@@ -1,13 +1,13 @@
 # -*- coding:UTF-8 -*-
 import streamlit as st
-from PIL import Image
 import numpy as np
 import pandas as pd
+from PIL import Image
+from streamlit_option_menu import option_menu
 from description import run_description
 from data import run_data
-from ml_app import run_ml_app
-from streamlit_option_menu import option_menu
 from eda_app import run_eda
+from status import run_status
 
 # Confit
 st.set_page_config(page_title='Parkinson Disease Progression Prediction', page_icon=':medical_symbol:')
@@ -81,7 +81,7 @@ def main():
     elif selected == 'EDA':
         run_eda()
     elif selected == 'STAT':
-        pass
+        run_status()
     else:
         print('error..')
 
