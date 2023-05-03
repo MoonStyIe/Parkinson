@@ -7,7 +7,7 @@ from streamlit_option_menu import option_menu
 from description import run_description
 from data import run_data
 from eda_app import run_eda
-from status import run_status
+from stat_app import run_status
 
 # Confit
 st.set_page_config(page_title='Parkinson Disease Progression Prediction', page_icon=':medical_symbol:')

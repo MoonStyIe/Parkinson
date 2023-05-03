@@ -26,3 +26,86 @@ def load_data():
     test = pd.read_csv(test_comp_dir / 'test.csv')
 
     return target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test
+
+def distribution_updrs1():
+    target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
+
+    target["origin"] = "Clinical Data"
+    sup_target["origin"] = "Supplemental Data"
+    combined = pd.concat([target, sup_target]).reset_index(drop=True)
+    fig = px.histogram(combined, x="updrs_1", color="origin", marginal="box", template="plotly_white",
+                       labels={"origin": "Data Source", "x": "Score", "y": "Density"})
+
+    fig.update_layout(
+        title={
+            'text': "UPDRS Part 1 Scores by Data Source",
+            'y': 0.95,
+            'x': 0.5,
+            'xanchor': 'center',
+            'yanchor': 'top'
+        },
+        xaxis_title="Score",
+        yaxis_title="Density"
+    )
+
+    st.plotly_chart(fig)
+
+def distribution_updrs2(target, sup_target):
+    target["origin"] = "Clinical Data"
+    sup_target["origin"] = "Supplemental Data"
+    combined = pd.concat([target, sup_target]).reset_index(drop=True)
+    fig = px.histogram(combined, x="updrs_2", color="origin", marginal="box", template="plotly_white",
+                       labels={"origin": "Data Source", "x": "Score", "y": "Density"})
+    fig.update_layout(
+        title={
+            'text': "UPDRS Part 2 Scores by Data Source",
+            'y': 0.95,
+            'x': 0.5,
+            'xanchor': 'center',
+            'yanchor': 'top'
+        },
+        xaxis_title="Score",
+        yaxis_title="Density"
+    )
+
+    st.plotly_chart(fig)
+
+def distribution_updrs3(target, sup_target):
+    target["origin"] = "Clinical Data"
+    sup_target["origin"] = "Supplemental Data"
+    combined = pd.concat([target, sup_target]).reset_index(drop=True)
+    fig = px.histogram(combined, x="updrs_3", color="origin", marginal="box", template="plotly_white",
+                       labels={"origin": "Data Source", "x": "Score", "y": "Density"})
+    fig.update_layout(
+        title={
+            'text': "UPDRS Part 3 Scores by Data Source",
+            'y': 0.95,
+            'x': 0.5,
+            'xanchor': 'center',
+            'yanchor': 'top'
+        },
+        xaxis_title="Score",
+        yaxis_title="Density"
+    )
+
+    st.plotly_chart(fig)
+
+def distribution_updrs4(target, sup_target):
+    target["origin"] = "Clinical Data"
+    sup_target["origin"] = "Supplemental Data"
+    combined = pd.concat([target, sup_target]).reset_index(drop=True)
+    fig = px.histogram(combined, x="updrs_4", color="origin", marginal="box", template="plotly_white",
+                       labels={"origin": "Data Source", "x": "Score", "y": "Density"})
+    fig.update_layout(
+        title={
+            'text': "UPDRS Part 4 Scores by Data Source",
+            'y': 0.95,
+            'x': 0.5,
+            'xanchor': 'center',
+            'yanchor': 'top'
+        },
+        xaxis_title="Score",
+        yaxis_title="Density"
+    )
+
+    st.plotly_chart(fig)
