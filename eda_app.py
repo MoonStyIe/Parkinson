@@ -191,6 +191,18 @@ def run_medication2():
     ))
 
     fig.update_layout(
+        title={
+            'text': "UPDRS Part 2 Medication",
+            'y': 0.95,
+            'x': 0.5,
+            'xanchor': 'center',
+            'yanchor': 'top'
+        },
+        xaxis_title="Score",
+        yaxis_title="Density"
+    )
+
+    fig.update_layout(
         xaxis_title="Visit Month",
         yaxis_title="Score",
         height=600,
@@ -228,6 +240,18 @@ def run_medication3():
             boxmean=True,
             marker=dict(color='dimgray')
     ))
+
+    fig.update_layout(
+        title={
+            'text': "UPDRS Part 3 Medication",
+            'y': 0.95,
+            'x': 0.5,
+            'xanchor': 'center',
+            'yanchor': 'top'
+        },
+        xaxis_title="Score",
+        yaxis_title="Density"
+    )
 
     fig.update_layout(
         xaxis_title="Visit Month",
@@ -269,6 +293,18 @@ def run_medication4():
     ))
 
     fig.update_layout(
+        title={
+            'text': "UPDRS Part 4 Medication",
+            'y': 0.95,
+            'x': 0.5,
+            'xanchor': 'center',
+            'yanchor': 'top'
+        },
+        xaxis_title="Score",
+        yaxis_title="Density"
+    )
+
+    fig.update_layout(
         xaxis_title="Visit Month",
         yaxis_title="Score",
         height=500,
@@ -299,6 +335,11 @@ def distribution_updrs1():
         yaxis_title="Density"
     )
 
+    fig.update_layout(
+        height=500,
+        width=800
+    )
+
     st.plotly_chart(fig)
 
 def distribution_updrs2():
@@ -319,6 +360,11 @@ def distribution_updrs2():
         },
         xaxis_title="Score",
         yaxis_title="Density"
+    )
+
+    fig.update_layout(
+        height=500,
+        width=800
     )
 
     st.plotly_chart(fig)
@@ -343,6 +389,11 @@ def distribution_updrs3():
         yaxis_title="Density"
     )
 
+    fig.update_layout(
+        height=500,
+        width=800
+    )
+
     st.plotly_chart(fig)
 
 def distribution_updrs4():
@@ -365,7 +416,53 @@ def distribution_updrs4():
         yaxis_title="Density"
     )
 
+    fig.update_layout(
+        height=500,
+        width=800
+    )
+
     st.plotly_chart(fig)
+
+def null_values_distribution():
+    target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
+    target = target.rename(columns={'upd23b_clinical_state_on_medication': 'medication'})
+    sup_target = sup_target.rename(columns={'upd23b_clinical_state_on_medication': 'medication'})
+    target['null_count'] = target.isnull().sum(axis=1)
+    sup_target["null_count"] = sup_target.isnull().sum(axis=1)
+
+    counts = target.groupby("null_count")["visit_id"].count().to_dict()
+    labels = ["{} Null Value(s)".format(k) for k in counts.keys()]
+    values = list(counts.values())
+
+    fig = go.Figure(data=[go.Pie(
+        labels=labels,
+        values=values,
+        hole=.3,
+        sort=False,
+        hoverinfo='label+value+percent',
+        textinfo='label+percent',
+        marker=dict(
+            colors=sns.color_palette("Set2")[0:len(labels)],
+        ),
+    )])
+    fig.update_layout(
+        title={
+            'text': "<b>Null Values Per Row in Clinical Data</b>",
+            'y':0.9,
+            'x':0.5,
+            'xanchor': 'center',
+            'yanchor': 'top',
+            'font': dict(size=20, color="#7f7f7f", family="Arial, sans-serif", weight="bold")
+        },
+        font=dict(
+            family="Arial, sans-serif",
+            size=15,
+            color="#7f7f7f"
+        ),
+    )
+    st.plotly_chart(fig)
+    return fig
+
 
 def run_eda():
     target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
@@ -380,7 +477,7 @@ def run_eda():
     else:
         pass
 
-    submenu1 = st.selectbox("Updrs-Medication", ['Updrs-Medication 1', 'Updrs-Medication 2', 'Updrs-Medication 3', 'Updrs-Medication 4'])
+    submenu1 = st.selectbox("⏏️ Updrs-Medication", ['Updrs-Medication 1', 'Updrs-Medication 2', 'Updrs-Medication 3', 'Updrs-Medication 4'])
 
     if submenu1 == 'Updrs-Medication 1':
         run_medication()
@@ -391,7 +488,7 @@ def run_eda():
     elif submenu1 == 'Updrs-Medication 4':
         run_medication4()
 
-    submenu2 = st.selectbox("Updrs-Distribution", ['Updrs-Distribution 1', 'Updrs-Distribution 2', 'Updrs-Distribution 3', 'Updrs-Distribution 4'])
+    submenu2 = st.selectbox("⏏️ Updrs-Distribution", ['Updrs-Distribution 1', 'Updrs-Distribution 2', 'Updrs-Distribution 3', 'Updrs-Distribution 4'])
 
     if submenu2 == 'Updrs-Distribution 1':
         distribution_updrs1()
@@ -401,11 +498,6 @@ def run_eda():
         distribution_updrs3()
     elif submenu2 == 'Updrs-Distribution 4':
         distribution_updrs4()
-
-
-
-
-
 
 
 
