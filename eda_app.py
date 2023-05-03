@@ -480,65 +480,6 @@ def create_null_value_pie_charts():
     fig4 = create_pie_chart(values_supplemental_clinical_data, labels_supplemental_clinical_data, "Supplemental Clinical Data Null Value Analysis")
     st.plotly_chart(fig4)
 
-def create_null_values_plot():
-    import plotly.express as px
-    import plotly.graph_objs as go
-    from plotly.subplots import make_subplots
-    target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
-
-    # target 의 결측치 정보를 담은 파생 변수 생성 - > target['null_count']
-    target['null_count'] = target.isnull().sum(axis=1)
-
-    null_count_labels = [target[(target["null_count"] == x)].isnull().sum().index[:-1] for x in range(1, 6)]
-
-    # 위의 null_count_labels와 같은 방식으로 null_count_values 리스트에는
-    # 1부터 5까지의 null_count값을 가진 데이터에서 각각의 특성들의 null값 개수를 저장한다.
-    null_count_values = [target[(target["null_count"] == x)].isnull().sum().values[:-1] for x in range(1, 6)]
-
-    # 그래프의 색상을 설정한다.
-    colors = ['#636EFA', '#EF553B', '#00CC96', '#AB63FA', '#FFA15A', '#19D3F3', '#FF6692', '#B6E880', '#FF97FF', '#FECB52']
-
-    # 그래프 객체를 생성한다.
-    fig = make_subplots(
-        rows=1, cols=4,  # 1행 4열로 설정
-        subplot_titles=(
-            "<span style='font-size: 10px'>Number of Rows With 1 Null</span>",  # 1개의 null 값을 가진 데이터
-            "<span style='font-size: 10px'>Number of Rows With 2 Nulls</span>",  # 2개의 null 값을 가진 데이터
-            "<span style='font-size: 10px'>Number of Rows With 3 Nulls</span>",  # 3개의 null 값을 가진 데이터
-            "<span style='font-size: 10px'>Number of Rows With 4 Nulls</span>"   # 4개의 null 값을 가진 데이터
-        )
-    )
-
-    # 1행 4열의 subplot에 각각 Bar 그래프를 추가한다.
-    for i in range(4):
-        fig.add_trace(
-            go.Bar(
-                x=null_count_labels[i],  # x축에 해당하는 값은 null_count_labels 리스트의 i번째 값으로 지정
-                y=null_count_values[i],  # y축에 해당하는 값은 null_count_values 리스트의 i번째 값으로 지정
-                text=null_count_values[i],  # Bar 그래프 상에 해당 값들을 나타낼 텍스트로 null_count_values 리스트의 i번째 값을 사용
-                textposition='auto',  # 텍스트를 어디에 위치시킬지를 지정. 'auto'는 그래프에 따라 자동으로 위치를 결정한다는 의미.
-                marker=dict(color=colors[:len(null_count_labels[i])]),  # 그래프의 색상을 colors 리스트에서 i번째까지만 사용해서 지정한다.
-                showlegend=False  # 라벨 제거
-            ),
-            row=1, col=i+1
-        )
-    fig.update_layout(
-        title="<b>Percentage of Missing Values by Category</b>",
-        font=dict(size=10, family="Roboto Mono"),
-        margin=dict(l=10, r=10, t=50, b=10),
-        width=700,
-        height=500,
-        showlegend=False,
-        paper_bgcolor="white",
-        plot_bgcolor="white",
-        yaxis=dict(
-            title="Percentage of Missing Values",
-            tickformat=".1%",
-            range=[0, 1]
-        )
-    )
-
-    st.plotly_chart(fig)
 
 
 
@@ -581,7 +522,6 @@ def run_eda():
     st.markdown("<hr>", unsafe_allow_html=True)
 
     create_null_value_pie_charts()
-    create_null_values_plot()
 
 
 
