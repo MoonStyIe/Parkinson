@@ -66,37 +66,37 @@ def run_data():
         "<h1 style='text-align: center; color: darkblue;'>Parkinson's </span><span style='text-align: center; color: darkmagenta;'>Data</span>",
         unsafe_allow_html=True)
     target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
-    submenu = st.selectbox("⏏️ Train", ['target', 'sup_target', 'train_peptides', 'train_proteins'])
+    submenu = st.selectbox("⏏️ Train", ['Target', 'Sup_Target', 'Train_Peptides', 'Train_Proteins'])
 
-    if submenu == 'target':
-        st.markdown("#### target data")
+    if submenu == 'Target':
+        st.markdown("#### 📋 Target Data")
         st.dataframe(target, use_container_width=True)
-    elif submenu == 'sup_target':
-        st.markdown("#### sup_target data")
+    elif submenu == 'Sup_Target':
+        st.markdown("#### 📋 Sup_Target Data")
         st.dataframe(sup_target, use_container_width=True)
-    elif submenu == 'train_peptides':
-        st.markdown("#### train_peptides data")
+    elif submenu == 'Train_Peptides':
+        st.markdown("#### 📋 Train_Peptides Data")
         st.dataframe(train_peptides, use_container_width=True)
-    elif submenu == 'train_proteins':
-        st.markdown("#### train_proteins data")
+    elif submenu == 'Train_Proteins':
+        st.markdown("#### 📋 Train_Proteins Data")
         st.dataframe(train_proteins, use_container_width=True)
     else:
         pass
 
     st.markdown('<hr>', unsafe_allow_html=True)
 
-    submenu2 = st.selectbox("⏏️ Test", ['test_peptides', 'test_proteins', 'sample_submission', 'test'])
-    if submenu2 == 'test_peptides':
-        st.markdown("#### test_peptides data")
+    submenu2 = st.selectbox("⏏️ Test", ['Test_Peptides', 'Test_Proteins', 'Sample_Submission', 'Test'])
+    if submenu2 == 'Test_Peptides':
+        st.markdown("#### 📋 Test_Peptides Data")
         st.dataframe(test_peptides, use_container_width=True)
-    elif submenu2 == 'test_proteins':
-        st.markdown("#### test_proteins data")
+    elif submenu2 == 'Test_Proteins':
+        st.markdown("#### 📋 Test_Proteins Data")
         st.dataframe(test_proteins, use_container_width=True)
-    elif submenu2 == 'sample_submission':
-        st.markdown("#### sample_submission data")
+    elif submenu2 == 'Sample_Submission':
+        st.markdown("#### 📋 Sample_Submission Data")
         st.dataframe(sample_submission, use_container_width=True)
-    elif submenu2 == 'test':
-        st.markdown("#### test data")
+    elif submenu2 == 'Test':
+        st.markdown("#### 📋 Test Data")
         st.dataframe(test, use_container_width=True)
     else:
         pass

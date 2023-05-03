@@ -28,38 +28,6 @@ def load_data():
     test = pd.read_csv(test_comp_dir / 'test.csv')
 
     return target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test
-# def show_data(target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test):
-#     st.markdown("#### target data")
-#     st.dataframe(target, use_container_width=True)
-#     st.markdown('<hr>', unsafe_allow_html=True)
-#
-#     st.markdown("#### sup_target data")
-#     st.dataframe(sup_target, use_container_width=True)
-#     st.markdown('<hr>', unsafe_allow_html=True)
-#
-#     st.markdown("#### train_peptides data")
-#     st.dataframe(train_peptides, use_container_width=True)
-#     st.markdown('<hr>', unsafe_allow_html=True)
-#
-#     st.markdown("#### train_proteins data")
-#     st.dataframe(train_proteins, use_container_width=True)
-#     st.markdown('<hr>', unsafe_allow_html=True)
-#
-#     st.markdown("#### test_peptides data")
-#     st.dataframe(test_peptides, use_container_width=True)
-#     st.markdown('<hr>', unsafe_allow_html=True)
-#
-#     st.markdown("#### test_proteins data")
-#     st.dataframe(test_proteins, use_container_width=True)
-#     st.markdown('<hr>', unsafe_allow_html=True)
-#
-#     st.markdown("#### sample_submission data")
-#     st.dataframe(sample_submission, use_container_width=True)
-#     st.markdown('<hr>', unsafe_allow_html=True)
-#
-#     st.markdown("#### test data")
-#     st.dataframe(test, use_container_width=True)
-#     st.markdown('<hr>', unsafe_allow_html=True)
 
 def show_chart(target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test):
     # Set data source column for each dataset
@@ -80,9 +48,8 @@ def show_chart(target, sup_target, train_peptides, train_proteins, test_peptides
         title={
             'text': "Visit Month by Data Source",
             'y': 0.95,
-            'x': 0.5,
-            # 'xanchor': 'center',
-            # 'yanchor': 'top'
+            'x': 0.36,
+            'font': {'color': 'darkblue'}  # 글꼴 색상을 변경
         },
         legend_title_text="Data Source"
     )
@@ -101,7 +68,7 @@ def show_chart(target, sup_target, train_peptides, train_proteins, test_peptides
 def show_chart2(target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test):
     fig = plt.figure(figsize=(20, 10))
     sns.histplot(data=target, x="visit_month", hue="updrs_1", multiple="stack")
-    plt.title("updrs_1!")
+    plt.title("updrs_1", loc='center', pad=20, color="darkblue", fontdict={'fontsize': 25, "fontweight": "bold"})
     st.pyplot(fig)
 def run_eda():
     target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
@@ -115,9 +82,4 @@ def run_eda():
         show_chart2(target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test)
     else:
         pass
-# def run_eda():
-#     st.markdown(
-#         "<h1 style='text-align: center; color: darkblue;'>Parkinson's </span><span style='text-align: center; color: darkmagenta;'>Exploratory Data Analysis</span>",
-#         unsafe_allow_html=True)
-
 
