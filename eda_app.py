@@ -423,101 +423,6 @@ def distribution_updrs4():
 
     st.plotly_chart(fig)
 
-def null_values_distribution():
-    target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
-    target = target.rename(columns={'upd23b_clinical_state_on_medication': 'medication'})
-    sup_target = sup_target.rename(columns={'upd23b_clinical_state_on_medication': 'medication'})
-    target['null_count'] = target.isnull().sum(axis=1)
-    sup_target["null_count"] = sup_target.isnull().sum(axis=1)
-
-    counts = target.groupby("null_count")["visit_id"].count().to_dict()
-    labels = ["{} Null Value(s)".format(k) for k in counts.keys()]
-    values = list(counts.values())
-
-    fig = go.Figure(data=[go.Pie(
-        labels=labels,
-        values=values,
-        hole=.3,
-        sort=False,
-        hoverinfo='label+value+percent',
-        textinfo='label+percent',
-        marker=dict(
-            colors=sns.color_palette("Set2")[0:len(labels)],
-        ),
-    )])
-    fig.update_layout(
-        title={
-            'text': "<b>Null Values Per Row in Clinical Data</b>",
-            'y':0.9,
-            'x':0.5,
-            'xanchor': 'center',
-            'yanchor': 'top',
-            'font': dict(size=20, color="#7f7f7f", family="Arial, sans-serif", weight="bold")
-        },
-        font=dict(
-            family="Arial, sans-serif",
-            size=15,
-            color="#7f7f7f"
-        ),
-    )
-    st.plotly_chart(fig)
-    return fig
-
-
-def NAN_chart():
-    target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
-
-    target_name = "Target"
-    sup_target_name = "Sup_Target"
-
-    # target 데이터프레임에 대한 파이 그래프
-    target['null_count'] = target.isnull().sum(axis=1)
-    counts = target.groupby('null_count')['visit_id'].count().to_dict()
-    labels = ['{} Null Value(s)'.format(k) for k in counts.keys()]
-    values = list(counts.values())
-    fig1 = go.Figure(data=[go.Pie(
-        labels=labels,
-        values=values,
-        hole=.3,
-        sort=False,
-        hoverinfo='label+value+percent',
-        textinfo='label+percent',
-        marker=dict(colors=sns.color_palette('Set2')[0:len(labels)]),
-    )])
-    fig1.update_layout(
-        title=f'Null Values Per Row in {target_name}',
-        font=dict(family='Arial, sans-serif', size=15, color='#7f7f7f'),
-    )
-
-    # sup_target 데이터프레임에 대한 파이 그래프
-    sup_target['null_count'] = sup_target.isnull().sum(axis=1)
-    counts = sup_target.groupby('null_count')['VisitIdentifier'].count().to_dict()
-    labels = ['{} Null Value(s)'.format(k) for k in counts.keys()]
-    values = list(counts.values())
-    fig2 = go.Figure(data=[go.Pie(
-        labels=labels,
-        values=values,
-        hole=.3,
-        sort=False,
-        hoverinfo='label+value+percent',
-        textinfo='label+percent',
-        marker=dict(colors=sns.color_palette('Set2')[0:len(labels)]),
-    )])
-    fig2.update_layout(
-        title=f'Null Values Per Row in {sup_target_name}',
-        font=dict(family='Arial, sans-serif', size=15, color='#7f7f7f'),
-    )
-
-    # 두 개의 그래프를 나란히 출력하기 위해 subplot 사용
-    fig = make_subplots(rows=1, cols=2, specs=[[{'type': 'domain'}, {'type': 'domain'}]])
-    fig.add_trace(fig1.data[0], row=1, col=1)
-    fig.add_trace(fig2.data[0], row=1, col=2)
-
-    fig.update_layout(title='Null Value Counts', font=dict(family='Arial, sans-serif', size=15, color='#7f7f7f'))
-
-    # streamlit을 이용하여 그래프 출력
-    st.plotly_chart(fig, use_container_width=True)
-
 def run_eda():
     target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
     submenu = st.sidebar.selectbox("📊 Chart Menu", ['Charts'])
@@ -526,7 +431,7 @@ def run_eda():
         "<h1 style='text-align: center; color: darkblue;'>Parkinson's </span><span style='text-align: center; color: darkmagenta;'>Exploratory Data Analysis</span>",
         unsafe_allow_html=True)
     if submenu == 'Charts':
-        show_chart(target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test)g
+        show_chart(target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test)
     else:
         pass
 
