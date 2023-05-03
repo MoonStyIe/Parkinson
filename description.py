@@ -41,11 +41,11 @@ CSF samples contain protein information as well as protein subcomponent informat
     st.latex(r'''
     {SMAPE} = \frac{100}{n} \sum_{t=1}^n \frac{\left|F_t-A_t\right|}{(|A_t|+|F_t|)/2}
     ''')
-    st.markdown("where: \n"
-                "- $n$ is the number of fitted points \n"
-                "- $t$ is the fitted point \n"
-                "- $F_t$ is the forecast value of the target for instance \n"
-                "- $A_t$ is the actual value of the target for instance \n"
+    st.markdown("***where***: \n"
+                "- $n$ : the number of fitted points \n"
+                "- $t$ : the fitted point \n"
+                "- $F_t$ : the forecast value of the target for instance \n"
+                "- $A_t$ : the actual value of the target for instance \n"
                 )
 
     st.write('<hr>', unsafe_allow_html=True)
