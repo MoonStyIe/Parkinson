@@ -61,13 +61,9 @@ def show_test(test_peptides, test_proteins, sample_submission, test):
     st.markdown("#### test data")
     st.dataframe(test, use_container_width=True)
 
-def run_data():
-    st.markdown(
-        "<h1 style='text-align: center; color: darkblue;'>Parkinson's </span><span style='text-align: center; color: darkmagenta;'>Data</span>",
-        unsafe_allow_html=True)
+def Train_data():
     target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
     submenu = st.selectbox("⏏️ Train", ['Target', 'Sup_Target', 'Train_Peptides', 'Train_Proteins'])
-
     if submenu == 'Target':
         st.markdown("#### 📋 Target Data")
         st.dataframe(target, use_container_width=True)
@@ -83,8 +79,10 @@ def run_data():
     else:
         pass
 
-    st.markdown('<hr>', unsafe_allow_html=True)
+    # st.markdown('<hr>', unsafe_allow_html=True)
 
+def Test_data():
+    target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
     submenu2 = st.selectbox("⏏️ Test", ['Test_Peptides', 'Test_Proteins', 'Sample_Submission', 'Test'])
     if submenu2 == 'Test_Peptides':
         st.markdown("#### 📋 Test_Peptides Data")
@@ -98,5 +96,20 @@ def run_data():
     elif submenu2 == 'Test':
         st.markdown("#### 📋 Test Data")
         st.dataframe(test, use_container_width=True)
+    else:
+        pass
+
+def run_data():
+    st.markdown(
+        "<h1 style='text-align: center; color: darkblue;'>Parkinson's </span><span style='text-align: center; color: darkmagenta;'>Data</span>",
+        unsafe_allow_html=True)
+    target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
+
+    submenumain = st.sidebar.selectbox("📁 Files", ['Train', 'Test'])
+
+    if submenumain == 'Train':
+        Train_data()
+    elif submenumain == 'Test':
+        Test_data()
     else:
         pass

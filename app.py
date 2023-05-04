@@ -8,6 +8,12 @@ from description import run_description
 from data import run_data
 from eda_app import run_eda
 from stat_app import run_status
+from ML import run_mls
+from ML import feautreImportancePlot
+from ML import run_model
+from ML import prediction
+from ML import prediction_plot
+from ML import run_ml
 
 # Confit
 st.set_page_config(page_title='Parkinson Disease Progression Prediction', page_icon=':medical_symbol:')
@@ -15,8 +21,8 @@ st.set_page_config(page_title='Parkinson Disease Progression Prediction', page_i
 
 def main():
     with st.sidebar:
-        selected = option_menu("Main Menu", ['Home', 'Description', 'Data', 'EDA', 'STAT'],
-                icons=['house', 'card-checklist', 'card-checklist', 'bar-chart', 'clipboard-data'],
+        selected = option_menu("Main Menu", ['Home', 'Description', 'Data', 'EDA', 'STAT', 'ML'],
+                icons=['house', 'card-checklist', 'card-checklist', 'bar-chart', 'clipboard-data', 'motherboard'],
                 menu_icon="cast", default_index=0, orientation = 'vertical')
 
     if selected == 'Home':
@@ -82,6 +88,9 @@ def main():
         run_eda()
     elif selected == 'STAT':
         run_status()
+    elif selected == 'ML':
+        run_mls()
+
     else:
         print('error..')
 
