@@ -366,23 +366,26 @@ def create_null_value_pie_charts_1():
     # train_clinical_data 에 대한 null_count 정보를 담은 딕셔너리 생성
     counts_train_clinical_data = target.groupby("null_count")["visit_id"].count().to_dict()
     sorted_counts_train_clinical_data = dict(sorted(counts_train_clinical_data.items()))
-    labels_train_clinical_data = ["{} Null Value(s)".format(k) for k in sorted_counts_train_clinical_data.keys()]
+    labels_train_clinical_data = ["{} Null Value(s)".format(k) for k in sorted(sorted_counts_train_clinical_data.keys())]
     values_train_clinical_data = list(sorted_counts_train_clinical_data.values())
 
     # train_peptides 에 대한 null_count 정보를 담은 딕셔너리 생성
     counts_train_peptides = train_peptides.groupby("null_count")["visit_id"].count().to_dict()
-    labels_train_peptides = ["{} Null Value(s)".format(k) for k in counts_train_peptides.keys()]
-    values_train_peptides = list(counts_train_peptides.values())
+    sorted_counts_train_peptides = dict(sorted(counts_train_peptides.items()))
+    labels_train_peptides = ["{} Null Value(s)".format(k) for k in sorted(sorted_counts_train_peptides.keys())]
+    values_train_peptides = list(sorted_counts_train_peptides.values())
 
     # train_proteins 에 대한 null_count 정보를 담은 딕셔너리 생성
     counts_train_proteins = train_proteins.groupby("null_count")["visit_id"].count().to_dict()
-    labels_train_proteins = ["{} Null Value(s)".format(k) for k in counts_train_proteins.keys()]
-    values_train_proteins = list(counts_train_proteins.values())
+    sorted_counts_train_proteins = dict(sorted(counts_train_proteins.items()))
+    labels_train_proteins = ["{} Null Value(s)".format(k) for k in sorted(sorted_counts_train_proteins.keys())]
+    values_train_proteins = list(sorted_counts_train_proteins.values())
 
     # supplemental_clinical_data 에 대한 null_count 정보를 담은 딕셔너리 생성
     counts_supplemental_clinical_data = sup_target.groupby("null_count")["visit_id"].count().to_dict()
-    labels_supplemental_clinical_data = ["{} Null Value(s)".format(k) for k in counts_supplemental_clinical_data.keys()]
-    values_supplemental_clinical_data = list(counts_supplemental_clinical_data.values())
+    sorted_counts_supplemental_clinical_data = dict(sorted(counts_supplemental_clinical_data.items()))
+    labels_supplemental_clinical_data = ["{} Null Value(s)".format(k) for k in sorted(sorted_counts_supplemental_clinical_data.keys())]
+    values_supplemental_clinical_data = list(sorted_counts_supplemental_clinical_data.values())
 
     # pie 차트를 그리는 함수 정의
     def create_pie_chart(values, labels, title, rotation=0):
@@ -399,7 +402,6 @@ def create_null_value_pie_charts_1():
     st.markdown("<h4 style='text-align: center; color: black;'>Train Clinical Data </span>", unsafe_allow_html=True)
     fig1 = create_pie_chart(values_train_clinical_data, labels_train_clinical_data, "Train Clinical Data Null Value Analysis", rotation=330)
     st.plotly_chart(fig1)
-
 
 def create_null_value_pie_charts_2():
 
@@ -419,27 +421,31 @@ def create_null_value_pie_charts_2():
 
     # train_clinical_data 에 대한 null_count 정보를 담은 딕셔너리 생성
     counts_train_clinical_data = target.groupby("null_count")["visit_id"].count().to_dict()
-    labels_train_clinical_data = ["{} Null Value(s)".format(k) for k in counts_train_clinical_data.keys()]
-    values_train_clinical_data = list(counts_train_clinical_data.values())
+    sorted_counts_train_clinical_data = dict(sorted(counts_train_clinical_data.items()))
+    labels_train_clinical_data = ["{} Null Value(s)".format(k) for k in sorted(sorted_counts_train_clinical_data.keys())]
+    values_train_clinical_data = list(sorted_counts_train_clinical_data.values())
 
     # train_peptides 에 대한 null_count 정보를 담은 딕셔너리 생성
     counts_train_peptides = train_peptides.groupby("null_count")["visit_id"].count().to_dict()
-    labels_train_peptides = ["{} Null Value(s)".format(k) for k in counts_train_peptides.keys()]
-    values_train_peptides = list(counts_train_peptides.values())
+    sorted_counts_train_peptides = dict(sorted(counts_train_peptides.items()))
+    labels_train_peptides = ["{} Null Value(s)".format(k) for k in sorted(sorted_counts_train_peptides.keys())]
+    values_train_peptides = list(sorted_counts_train_peptides.values())
 
     # train_proteins 에 대한 null_count 정보를 담은 딕셔너리 생성
     counts_train_proteins = train_proteins.groupby("null_count")["visit_id"].count().to_dict()
-    labels_train_proteins = ["{} Null Value(s)".format(k) for k in counts_train_proteins.keys()]
-    values_train_proteins = list(counts_train_proteins.values())
+    sorted_counts_train_proteins = dict(sorted(counts_train_proteins.items()))
+    labels_train_proteins = ["{} Null Value(s)".format(k) for k in sorted(sorted_counts_train_proteins.keys())]
+    values_train_proteins = list(sorted_counts_train_proteins.values())
 
     # supplemental_clinical_data 에 대한 null_count 정보를 담은 딕셔너리 생성
     counts_supplemental_clinical_data = sup_target.groupby("null_count")["visit_id"].count().to_dict()
-    labels_supplemental_clinical_data = ["{} Null Value(s)".format(k) for k in counts_supplemental_clinical_data.keys()]
-    values_supplemental_clinical_data = list(counts_supplemental_clinical_data.values())
+    sorted_counts_supplemental_clinical_data = dict(sorted(counts_supplemental_clinical_data.items()))
+    labels_supplemental_clinical_data = ["{} Null Value(s)".format(k) for k in sorted(sorted_counts_supplemental_clinical_data.keys())]
+    values_supplemental_clinical_data = list(sorted_counts_supplemental_clinical_data.values())
 
     # pie 차트를 그리는 함수 정의
-    def create_pie_chart(values, labels, title):
-        fig = go.Figure(data=[go.Pie(labels=labels, values=values, hole=.3)])
+    def create_pie_chart(values, labels, title, rotation=0):
+        fig = go.Figure(data=[go.Pie(labels=labels, values=values, hole=.3, rotation=rotation)])
         fig.update_layout(
         title=title,
         font=dict(size=16),
