@@ -346,59 +346,6 @@ def distribution_updrs4():
 
     st.plotly_chart(fig)
 
-# def create_null_value_pie_charts_1():
-#     target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
-#
-#     # target 의 결측치 정보를 담은 파생 변수 생성 - > target['null_count']
-#     target['null_count'] = target.isnull().sum(axis=1)
-#
-#     # 위 작업을 train_peptides 데이터 셋에도 적용
-#     train_peptides["null_count"] = train_peptides.isnull().sum(axis=1)
-#
-#     # 위 작업을 train_proteins 데이터 셋에도 적용
-#     train_proteins["null_count"] = train_proteins.isnull().sum(axis=1)
-#
-#     # 위 작업을 supplemental_clinical_data 데이터 셋에도 적용
-#     sup_target["null_count"] = sup_target.isnull().sum(axis=1)
-#
-#     # train_clinical_data 에 대한 null_count 정보를 담은 딕셔너리 생성
-#     counts_train_clinical_data = target.groupby("null_count")["visit_id"].count().to_dict()
-#     labels_train_clinical_data = ["{} Null Value(s)".format(k) for k in counts_train_clinical_data.keys()]
-#     values_train_clinical_data = list(counts_train_clinical_data.values())
-#
-#     # train_peptides 에 대한 null_count 정보를 담은 딕셔너리 생성
-#     counts_train_peptides = train_peptides.groupby("null_count")["visit_id"].count().to_dict()
-#     labels_train_peptides = ["{} Null Value(s)".format(k) for k in counts_train_peptides.keys()]
-#     values_train_peptides = list(counts_train_peptides.values())
-#
-#     # train_proteins 에 대한 null_count 정보를 담은 딕셔너리 생성
-#     counts_train_proteins = train_proteins.groupby("null_count")["visit_id"].count().to_dict()
-#     labels_train_proteins = ["{} Null Value(s)".format(k) for k in counts_train_proteins.keys()]
-#     values_train_proteins = list(counts_train_proteins.values())
-#
-#     # supplemental_clinical_data 에 대한 null_count 정보를 담은 딕셔너리 생성
-#     counts_supplemental_clinical_data = sup_target.groupby("null_count")["visit_id"].count().to_dict()
-#     labels_supplemental_clinical_data = ["{} Null Value(s)".format(k) for k in
-#                                          counts_supplemental_clinical_data.keys()]
-#     values_supplemental_clinical_data = list(counts_supplemental_clinical_data.values())
-#
-#     # pie 차트를 그리는 함수 정의
-#     def create_pie_chart(values, labels, title):
-#         fig = go.Figure(data=[go.Pie(labels=labels, values=values, hole=.3)])
-#         fig.update_layout(
-#             title=title,
-#             font=dict(size=16),
-#             width=700,
-#             height=500,
-#             legend=dict(orientation="h")
-#         )
-#         return fig
-#
-#     st.markdown("<h4 style='text-align: center; color: black;'>Train Clinical Data </span>", unsafe_allow_html=True)
-#     fig1 = create_pie_chart(values_train_clinical_data, labels_train_clinical_data,
-#                             "Train Clinical Data Null Value Analysis")
-#     st.plotly_chart(fig1)
-
 def create_null_value_pie_charts_1():
 
     target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
@@ -505,6 +452,35 @@ def create_null_value_pie_charts_2():
     fig4 = create_pie_chart(values_supplemental_clinical_data, labels_supplemental_clinical_data, "Supplemental Clinical Data Null Value Analysis")
     st.plotly_chart(fig4)
 
+def null_info():
+    st.markdown(":bulb: **Rows with one null value:**\n"
+    "- If there is a single null value in a row, it is generally confirmed that **<span style='color:#F1C40F'>MEDICATION column</span>** is null. \n"
+    "- The data in the medication column is **<span style='color:#F1C40F'>ON, OFF categorical data</span>** The column checks for **<span style='color:#F1C40F'>medication status.</span>** \n"
+    "- The other two instances of null value counts occur 7 times in UPDRS_3 and 21 times in UPDRS_4. \n"
+    "- Part 3 of the UPDRS assessment is about motor assessment and the minimum score is 0. \n"
+    "- Part 4 of the UPDRS assessment is about exercise complications and again has a minimum score of 0. \n"
+    "- These columns indicate that no assessment was performed **<span style='color:#F1C40F'>This is important because a score of 0 means that the patient was assessed and considered to have a normal response.</span>**",
+    unsafe_allow_html=True)
+
+    st.markdown(":bulb: **Rows with two null value:**\n"
+    "- If a row has two null values, this usually corresponds to **<span style='color:#F1C40F'>UPDRS_4 and MEDICATION.</span>** \n"
+    "- The null values are important here because, as mentioned earlier, valid responses are either on or off, so the evaluation can't be sure whether or not it failed to capture the **<span style='color:#F1C40F'>medication</span>** status. \n"
+    "- Most of the other null value fields occur in UPDRS_4, which is related to motor complications. Other null values occur infrequently in the UPDRS_3 and UPDRS_2 fields. \n"
+    "- Again, UPDRS part 3 is about motor assessment **<span style='color:#F1C40F'>where a null value cannot be assumed to be a score of 0, as 0 represents normal function.</span>** \n"
+    "- In UPDRS part 2, the assessment is about the experience of exercise in daily life, and a null value here could indicate that no assessment was performed. \n",
+    unsafe_allow_html=True)
+
+    st.markdown(":bulb: **Rows with three null value:**\n"
+    "- There are 10 instances where a row contains 3 null values. \n"
+    "- In each instance, the row has no information for UPDRS_3, UPDRS_4, and MEDICATION **<span style='color:#F1C40F'>Again, missing values cannot be assumed to be zero.</span>** \n",
+    unsafe_allow_html=True)
+
+    st.markdown(":bulb: **Rows with four null value:**\n"
+    "- There is only a **<span style='color:#F1C40F'>single</span>** instance of a row with four null values. \n"
+    "- It appears that **<span style='color:#F1C40F'>only the UPDRS Part 3 assessment was performed during the visit.</span>** \n"
+    "- Again, since a 0-based score represents a normal response, **<span style='color:#F1C40F'>null values cannot be interpreted as 0.</span>**",
+    unsafe_allow_html=True)
+
 def run_eda():
     target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
     submenu = st.sidebar.selectbox("📊 Chart Menu", ['Charts'])
@@ -529,7 +505,7 @@ def run_eda():
         run_medication4()
 
     st.markdown(":pencil: **Interpret:**\n"
-    "- In the graph above, we can see that the patients who took the medication increased their **<span style='color:#F1C40F'>scores more slowly</span>**. than the patients who did not take the medication. \n",
+    "- In the graph above, we can see that the patients who took the medication increased their **<span style='color:#F1C40F'>scores more slowly</span>** than the patients who did not take the medication. \n",
     unsafe_allow_html=True)
 
     st.markdown("<hr>", unsafe_allow_html=True)
@@ -546,8 +522,8 @@ def run_eda():
         distribution_updrs4()
 
     st.markdown(":pencil: **Interpret:**\n" 
-    "- UPDRS parts 1 and 4 scores appear **<span style='color:#F1C40F'>to have a fairly similar</span>**. distribution between the Train Clinical Data source and the Supplemental Clinical Data source. \n"
-    "- UPDRS part 2 and 3 scores **<span style='color:#F1C40F'>have a much higher percentage of zero-based</span>**. scores in the clinical data when compared to the supplemental data source. ",
+    "- UPDRS parts 1 and 4 scores appear **<span style='color:#F1C40F'>to have a fairly similar</span>** distribution between the Train Clinical Data source and the Supplemental Clinical Data source. \n"
+    "- UPDRS part 2 and 3 scores **<span style='color:#F1C40F'>have a much higher percentage of zero-based</span>** scores in the clinical data when compared to the supplemental data source. ",
     unsafe_allow_html=True)
 
     st.markdown("<hr>", unsafe_allow_html=True)
@@ -556,8 +532,49 @@ def run_eda():
 
     if submenu3 == 'Train Clinical Data':
         create_null_value_pie_charts_1()
+
     elif submenu3 == 'Supplemental Clinical Data':
         create_null_value_pie_charts_2()
+
+    st.markdown(":pencil: **Interpret:**\n"
+                "- There are no missing values in the train_peptides and train_protiens datasets. \n"
+                "- The null values in the data were checked in train_clinical_data and supplemental_clinical_data **<span style='color:#F1C40F'>the analysis of the number of nulls in each row is shown below.</span>** ",
+                unsafe_allow_html=True)
+
+    if st.button("More"):
+        null_info()
+
+
+
+    # st.markdown(":bulb: **Rows with one null value:**\n"
+    # "- If there is a single null value in a row, it is generally confirmed that **<span style='color:#F1C40F'>MEDICATION column</span>** is null. \n"
+    # "- The data in the medication column is **<span style='color:#F1C40F'>ON, OFF categorical data</span>** The column checks for **<span style='color:#F1C40F'>medication status.</span>** \n"
+    # "- The other two instances of null value counts occur 7 times in UPDRS_3 and 21 times in UPDRS_4. \n"
+    # "- Part 3 of the UPDRS assessment is about motor assessment and the minimum score is 0. \n"
+    # "- Part 4 of the UPDRS assessment is about exercise complications and again has a minimum score of 0. \n"
+    # "- These columns indicate that no assessment was performed **<span style='color:#F1C40F'>This is important because a score of 0 means that the patient was assessed and considered to have a normal response.</span>**",
+    # unsafe_allow_html=True)
+    #
+    # st.markdown(":bulb: **Rows with two null value:**\n"
+    # "- If a row has two null values, this usually corresponds to **<span style='color:#F1C40F'>UPDRS_4 and MEDICATION.</span>** \n"
+    # "- The null values are important here because, as mentioned earlier, valid responses are either on or off, so the evaluation can't be sure whether or not it failed to capture the **<span style='color:#F1C40F'>medication</span>** status. \n"
+    # "- Most of the other null value fields occur in UPDRS_4, which is related to motor complications. Other null values occur infrequently in the UPDRS_3 and UPDRS_2 fields. \n"
+    # "- Again, UPDRS part 3 is about motor assessment **<span style='color:#F1C40F'>where a null value cannot be assumed to be a score of 0, as 0 represents normal function.</span>** \n"
+    # "- In UPDRS part 2, the assessment is about the experience of exercise in daily life, and a null value here could indicate that no assessment was performed. \n",
+    # unsafe_allow_html=True)
+    #
+    # st.markdown(":bulb: **Rows with three null value:**\n"
+    # "- There are 10 instances where a row contains 3 null values. \n"
+    # "- In each instance, the row has no information for UPDRS_3, UPDRS_4, and MEDICATION **<span style='color:#F1C40F'>Again, missing values cannot be assumed to be zero.</span>** \n",
+    # unsafe_allow_html=True)
+    #
+    # st.markdown(":bulb: **Rows with four null value:**\n"
+    # "- There is only a **<span style='color:#F1C40F'>single</span>** instance of a row with four null values. \n"
+    # "- It appears that **<span style='color:#F1C40F'>only the UPDRS Part 3 assessment was performed during the visit.</span>** \n"
+    # "- Again, since a 0-based score represents a normal response, **<span style='color:#F1C40F'>null values cannot be interpreted as 0.</span>**",
+    # unsafe_allow_html=True)
+
+
 
 
 
