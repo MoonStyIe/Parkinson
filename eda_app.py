@@ -2,6 +2,7 @@
 
 import matplotlib.pyplot as plt
 import seaborn as sns
+import plotly
 import plotly.graph_objects as go
 import plotly.figure_factory as ff
 from pathlib import Path
@@ -488,15 +489,70 @@ def null_info():
     "- Again, since a 0-based score represents a normal response, **<span style='color:#F1C40F'>null values cannot be interpreted as 0.</span>**",
     unsafe_allow_html=True)
 
-def run_eda():
+
+def submenu_1():
     target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
-    submenu = st.sidebar.selectbox("📊 Chart Menu", ['Charts'])
 
-    st.markdown(
-        "<h1 style='text-align: center; color: darkblue;'>Parkinson's </span><span style='text-align: center; color: darkmagenta;'>Exploratory Data Analysis</span>",
-        unsafe_allow_html=True)
+    grouped_data = target.groupby('visit_month')[['updrs_1', 'updrs_2', 'updrs_3', 'updrs_4']].mean()
 
-    submenu1 = st.selectbox("⏏️ Updrs-Medication", ['Updrs-Medication 1', 'Updrs-Medication 2', 'Updrs-Medication 3', 'Updrs-Medication 4'])
+    colors = ['#FF5733', '#C70039', '#900C3F', '#581845']  # Set custom colors for the plot
+
+    fig = make_subplots(rows=2, cols=2, subplot_titles=(
+    "Mean UPDRS 1 Scores by Visit Month", "Mean UPDRS 2 Scores by Visit Month", "Mean UPDRS 3 Scores by Visit Month",
+    "Mean UPDRS 4 Scores by Visit Month"))
+
+    for i in range(4):
+        trace1 = go.Scatter(x=grouped_data.index, y=grouped_data.iloc[:, i], mode='lines', name=f'UPDRS {i + 1}')
+        trace2 = go.Scatter(x=target['visit_month'], y=target[f'updrs_{i + 1}'], mode='markers',
+                            name=f'UPDRS {i + 1} Scores')
+        fig.add_traces([trace1, trace2], rows=(i // 2) + 1, cols=(i % 2) + 1)
+
+    fig.update_xaxes(title_text='Visit Month', row=1, col=1)
+    fig.update_xaxes(title_text='Visit Month', row=1, col=2)
+    fig.update_xaxes(title_text='Visit Month', row=2, col=1)
+    fig.update_xaxes(title_text='Visit Month', row=2, col=2)
+
+    fig.update_yaxes(title_text='Average Score', row=1, col=1)
+    fig.update_yaxes(title_text='Average Score', row=1, col=2)
+    fig.update_yaxes(title_text='Average Score', row=2, col=1)
+    fig.update_yaxes(title_text='Average Score', row=2, col=2)
+
+    fig.update_layout(
+        title={
+        'text':'Mean UPDRS Scores by Visit Month',
+        'font':{'size':20}
+        },
+        height=800,
+        showlegend=False,
+        title_x=0.3,
+        title_y=0.97
+    )
+
+    st.plotly_chart(fig)
+
+    st.markdown(":pencil: **Interpret:**\n"
+                "- In the graph above, The UPDRS[1-4] score increases overall as the visit month progresses.",
+                unsafe_allow_html=True)
+
+def submenu_2():
+    submenu3 = st.selectbox("⏏️ Null Value Analysis", ['Train Clinical Data', 'Supplemental Clinical Data'])
+
+    if submenu3 == 'Train Clinical Data':
+        create_null_value_pie_charts_1()
+    elif submenu3 == 'Supplemental Clinical Data':
+        create_null_value_pie_charts_2()
+
+    st.markdown(":pencil: **Interpret:**\n"
+                "- There are no missing values in the train_peptides and train_protiens datasets. \n"
+                "- The null values in the data were checked in train_clinical_data and supplemental_clinical_data **<span style='color:#F1C40F'>the analysis of the number of nulls in each row is shown above.</span>** ",
+                unsafe_allow_html=True)
+
+    with st.expander("Rows with null value"):
+        null_info()
+
+def submenu_3():
+    submenu1 = st.selectbox("⏏️ Updrs-Medication",
+                            ['Updrs-Medication 1', 'Updrs-Medication 2', 'Updrs-Medication 3', 'Updrs-Medication 4'])
 
     if submenu1 == 'Updrs-Medication 1':
         run_medication()
@@ -511,8 +567,7 @@ def run_eda():
     "- In the graph above, we can see that the patients who took the medication increased their **<span style='color:#F1C40F'>scores more slowly</span>** than the patients who did not take the medication. \n",
     unsafe_allow_html=True)
 
-    st.markdown("<hr>", unsafe_allow_html=True)
-
+def submenu_4():
     submenu2 = st.selectbox("⏏️ Updrs-Distribution", ['Updrs-Distribution 1', 'Updrs-Distribution 2', 'Updrs-Distribution 3', 'Updrs-Distribution 4'])
 
     if submenu2 == 'Updrs-Distribution 1':
@@ -529,25 +584,65 @@ def run_eda():
     "- UPDRS part 2 and 3 scores **<span style='color:#F1C40F'>have a much higher percentage of zero-based</span>** scores in the clinical data when compared to the supplemental data source. ",
     unsafe_allow_html=True)
 
-    st.markdown("<hr>", unsafe_allow_html=True)
+def submenu2_1():
+    # NPX
+    target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
+    sns.kdeplot(data=train_proteins["NPX"], shade=True, color="turquoise", log_scale=True)
+    sns.set(style="whitegrid")
+    sns.set(rc={'figure.figsize': (10, 8)})
+    sns.set(font_scale=1.5)
 
-    submenu3 = st.selectbox("⏏️ Null Value Analysis", ['Train Clinical Data', 'Supplemental Clinical Data'])
+    plt.title("Log-scaled NPX Abundance Distribution", fontsize=15)
+    plt.ylabel("Density")
+    plt.xlabel("NPX")
 
-    if submenu3 == 'Train Clinical Data':
-        create_null_value_pie_charts_1()
+    fig = plt.gcf()
+    st.pyplot(fig)
 
-    elif submenu3 == 'Supplemental Clinical Data':
-        create_null_value_pie_charts_2()
+    st.markdown(":pencil: **Interpret:**\n" 
+    "- As you can see, there is a lot of variability regarding the actual frequency of protein expression.  We'll take a closer look at the distribution of the various proteins and their association with UPDRS scores, but for now, the key observation is that normalized protein expression is highly variable, as evidenced by the minimum, maximum, and standard deviation of the features. ",
+    unsafe_allow_html=True)
 
-    st.markdown(":pencil: **Interpret:**\n"
-                "- There are no missing values in the train_peptides and train_protiens datasets. \n"
-                "- The null values in the data were checked in train_clinical_data and supplemental_clinical_data **<span style='color:#F1C40F'>the analysis of the number of nulls in each row is shown above.</span>** ",
-                unsafe_allow_html=True)
+def submenu2_2():
+    # PeptideAbundance
+    target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
+    fig, ax = plt.subplots()
+    sns.kdeplot(data=train_peptides["PeptideAbundance"], shade=True, color="r", log_scale=True, ax=ax)
 
-    with st.expander("Rows with null value"):
-        null_info()
+    plt.title("Log-scaled Peptide Abundance Distribution", fontsize=15)
+    plt.ylabel("Density")
+    plt.xlabel("PeptideAbundance")
 
-    # def plot_correlation_heatmap1()
+    st.pyplot(fig)
+
+    st.markdown(":pencil: **Interpret:**\n" 
+    "- There is a lot of variation in the density of the peptides. The minimum, maximum, and standard deviation tell us that the density of peptides is highly dependent on the specific peptide we are looking at. So we can plot a kernel density estimate to see where most of the values lie ",
+    unsafe_allow_html=True)
+
+def run_eda():
+    target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
+    st.markdown(
+        "<h1 style='text-align: center; color: darkblue;'>Parkinson's </span><span style='text-align: center; color: darkmagenta;'>Exploratory Data Analysis</span>",
+        unsafe_allow_html=True)
+
+    submenu = st.sidebar.selectbox("📊 Chart Menu", ['Clinical / Supplimental Clinical', 'Protein / Peptide'])
+
+    if submenu == 'Clinical / Supplimental Clinical':
+        submenu_1()
+        st.write('<hr>', unsafe_allow_html=True)
+        submenu_2()
+        st.write('<hr>', unsafe_allow_html=True)
+        submenu_3()
+        st.write('<hr>', unsafe_allow_html=True)
+        submenu_4()
+    elif submenu == 'Protein / Peptide':
+        submenu2_1()
+        st.write('<hr>', unsafe_allow_html=True)
+        submenu2_2()
+
+
+
+
 
 
 
