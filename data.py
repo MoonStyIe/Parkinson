@@ -113,3 +113,68 @@ def run_data():
         Test_data()
     else:
         pass
+
+    st.markdown('<hr>', unsafe_allow_html=True)
+
+    # st.markdown("<span style='text-align: center; color:darkblue'> ***Dataset Column Description*** </span> \n", unsafe_allow_html=True)
+    st.markdown(
+        "<h3 style='text-align: center; color: darkblue;'>Dataset Column </span><span style='text-align: center; color: darkmagenta;'>Description</span> \n",
+        unsafe_allow_html=True)
+
+    st.markdown(
+        """
+        \n - <div style='background-color: #F5F5F5; border-radius: 5px; display: inline-block; padding: 0px 5px;'>visit_id</div> - ID code for the visit.
+        """
+        , unsafe_allow_html=True)
+    st.markdown(
+        """
+        - <div style='background-color: #F5F5F5; border-radius: 5px; display: inline-block; padding: 0px 5px;'>visit_month</div> - The month of the visit, relative to the first visit by the patient.
+        """
+        , unsafe_allow_html=True)
+    st.markdown(
+        """
+        - <div style='background-color: #F5F5F5; border-radius: 5px; display: inline-block; padding: 0px 5px;'>patient_id</div> - An ID code for the patient.
+        """
+        , unsafe_allow_html=True)
+    st.markdown(
+        """
+        - <div style='background-color: #F5F5F5; border-radius: 5px; display: inline-block; padding: 0px 5px;'>UniProt</div> - The UniProt ID code for the associated protein. There are often several peptides per protein.
+        """
+        , unsafe_allow_html=True)
+    st.markdown(
+        """
+        - <div style='background-color: #F5F5F5; border-radius: 5px; display: inline-block; padding: 0px 5px;'>Peptide</div> - The sequence of amino acids included in the peptide. Some rare annotations may not be included in the table. The test set may include peptides not found in the train set.
+        """
+        , unsafe_allow_html=True)
+    st.markdown(
+        """
+        - <div style='background-color: #F5F5F5; border-radius: 5px; display: inline-block; padding: 0px 5px;'>PeptideAbundance</div> - The frequency of the amino acid in the sample.
+        """
+        , unsafe_allow_html=True)
+    st.markdown(
+        """
+        - <div style='background-color: #F5F5F5; border-radius: 5px; display: inline-block; padding: 0px 5px;'>NPX</div> - Normalized protein expression. The frequency of the protein's occurrence in the sample. May not have a 1:1 relationship with the component peptides as some proteins contain repeated copies of a given peptide.
+        """
+        , unsafe_allow_html=True)
+    st.markdown(
+        """
+        - <div style='background-color: #F5F5F5; border-radius: 5px; display: inline-block; padding: 0px 5px;'>updrs_[1-4]</div> - The patient's score for part N of the Unified Parkinson's Disease Rating Scale. Higher numbers indicate more severe symptoms. Each sub-section covers a distinct category of symptoms, such as mood and behavior for Part 1 and motor functions for Part 3.
+        """
+        , unsafe_allow_html=True)
+    st.markdown(
+        """
+        - <div style='background-color: #F5F5F5; border-radius: 5px; display: inline-block; padding: 0px 5px;'>upd23b_clinical_state_on_medication</div> - Whether or not the patient was taking medication such as Levodopa during the UPDRS assessment. Expected to mainly affect the scores for Part 3 (motor function). These medications wear off fairly quickly (on the order of one day) so it's common for patients to take the motor function exam twice in a single month, both with and without medication.
+
+        """
+        , unsafe_allow_html=True)
+
+
+
+
+
+
+
+
+
+
+
