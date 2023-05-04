@@ -106,7 +106,7 @@ def run_data():
     target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
 
     st.markdown(
-        "<h3 style='text-align: center; color: darkmagenta;'>Dataset Column Description</span> \n",
+        "<h3 style='text-align: left; color: darkmagenta;'>📝 Dataset Column Description</span> \n",
         unsafe_allow_html=True)
 
     st.markdown(
