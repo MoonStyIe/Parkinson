@@ -541,10 +541,8 @@ def run_eda():
                 "- The null values in the data were checked in train_clinical_data and supplemental_clinical_data **<span style='color:#F1C40F'>the analysis of the number of nulls in each row is shown below.</span>** ",
                 unsafe_allow_html=True)
 
-    if st.button("More"):
+    with st.expander("Rows with null value"):
         null_info()
-
-
 
     # st.markdown(":bulb: **Rows with one null value:**\n"
     # "- If there is a single null value in a row, it is generally confirmed that **<span style='color:#F1C40F'>MEDICATION column</span>** is null. \n"
