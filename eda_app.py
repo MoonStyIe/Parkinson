@@ -33,80 +33,6 @@ def load_data():
 
     return target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test
 
-# def show_chart(target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test):
-#     # Set data source column for each dataset
-#     target["origin"] = "Clinical Data"
-#     sup_target["origin"] = "Supplemental Data"
-#
-#     # Combine data
-#     combined = pd.concat([target, sup_target]).reset_index(drop=True)
-#
-#     # Create plot
-#     fig = px.histogram(combined, x="visit_month", color="origin", nbins=30,
-#                        marginal="box", histnorm="probability density",
-#                        template="plotly_white",
-#                        labels={"origin": "Data Source"})
-#
-#     # Update plot layout
-#     fig.update_layout(
-#         title={
-#             'text': "Visit Month by Data Source",
-#             'y': 0.95,
-#             'x': 0.36,
-#             'font': {'color': 'darkblue'}  # 글꼴 색상을 변경
-#         },
-#         legend_title_text="Data Source"
-#     )
-#
-#     # Update plot traces
-#     fig.update_traces(opacity=0.75)
-#
-#     # Show plot
-#     st.plotly_chart(fig)
-
-def clinical_distribution(target, sup_target):
-    target["origin"] = "Clinical Data"
-    sup_target["origin"] = "Supplemental Data"
-
-    combined = pd.concat([target, sup_target]).reset_index(drop=True)
-
-    features = ["updrs_1", "updrs_2", "updrs_3", "updrs_4"]
-    labels = ["UPDRS Part 1", "UPDRS Part 2", "UPDRS Part 3", "UPDRS Part 4"]
-
-    for x, feature in enumerate(features):
-        fig = px.histogram(combined, x=feature, color="origin", marginal="box", template="plotly_white",
-                           labels={"origin": "Data Source", "x": "Score", "y": "Density"})
-
-        hist_data = [target[feature][pd.notna(target[feature])],
-                     sup_target[feature][pd.notna(sup_target[feature])]]
-        group_labels = ["Clinical Data", "Supplemental Data"]
-        colors = ['rgb(255, 0, 0)', 'rgb(0, 0, 255)']
-        bin_size = 0.5
-
-        fig = ff.create_distplot(hist_data, group_labels, bin_size=bin_size,
-                                 curve_type='normal', colors=colors)
-        fig.update_layout(
-            title={
-                'text': "{} Scores by Data Source".format(labels[x]),
-                'y': 0.95,
-                'x': 0.5,
-                'xanchor': 'center',
-                'yanchor': 'top'
-            },
-            xaxis_title="Score",
-            yaxis_title="Density"
-        )
-
-        st.plotly_chart(fig)
-
-
-
-def show_chart2(target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test):
-    fig = plt.figure(figsize=(20, 10))
-    sns.histplot(data=target, x="visit_month", hue="updrs_1", multiple="stack")
-    plt.title("Updrs_1", loc='center', pad=20, color="darkblue", fontdict={'fontsize': 25, "fontweight": "bold"})
-    st.pyplot(fig)
-
 def run_medication():
     target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
 
@@ -157,9 +83,6 @@ def run_medication():
     )
 
     st.plotly_chart(fig)
-    st.markdown(":pencil: **Interpret:**\n" 
-    "- As can be seen in the graph above, we can divide the oil price trend into **<span style='color:#F1C40F'>three phases</span>**. The first and last of these, Jan2013-Jul2014 and Jan2015-Jul2107 respectively, show stabilised trends with ups and downs. However, in the second phase, Jul2014-Jan2015, oil prices decrease considerably. \n"
-    "- Now, taking into account the issue of missing values for oil price, we are going to fill them by **<span style='color:#F1C40F'>backward fill technique</span>**. That means filling missing values with next data point (Forward filling means fill missing values with previous data", unsafe_allow_html=True)
 
 def run_medication2():
     target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
@@ -211,9 +134,6 @@ def run_medication2():
     )
 
     st.plotly_chart(fig)
-    st.markdown(":pencil: **Interpret:**\n" 
-    "- As can be seen in the graph above, we can divide the oil price trend into **<span style='color:#F1C40F'>three phases</span>**. The first and last of these, Jan2013-Jul2014 and Jan2015-Jul2107 respectively, show stabilised trends with ups and downs. However, in the second phase, Jul2014-Jan2015, oil prices decrease considerably. \n"
-    "- Now, taking into account the issue of missing values for oil price, we are going to fill them by **<span style='color:#F1C40F'>backward fill technique</span>**. That means filling missing values with next data point (Forward filling means fill missing values with previous data", unsafe_allow_html=True)
 
 def run_medication3():
     target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
@@ -265,9 +185,6 @@ def run_medication3():
     )
 
     st.plotly_chart(fig)
-    st.markdown(":pencil: **Interpret:**\n" 
-    "- As can be seen in the graph above, we can divide the oil price trend into **<span style='color:#F1C40F'>three phases</span>**. The first and last of these, Jan2013-Jul2014 and Jan2015-Jul2107 respectively, show stabilised trends with ups and downs. However, in the second phase, Jul2014-Jan2015, oil prices decrease considerably. \n"
-    "- Now, taking into account the issue of missing values for oil price, we are going to fill them by **<span style='color:#F1C40F'>backward fill technique</span>**. That means filling missing values with next data point (Forward filling means fill missing values with previous data", unsafe_allow_html=True)
 
 def run_medication4():
     target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
@@ -319,10 +236,6 @@ def run_medication4():
     )
 
     st.plotly_chart(fig)
-    st.markdown(":pencil: **Interpret:**\n" 
-    "- As can be seen in the graph above, we can divide the oil price trend into **<span style='color:#F1C40F'>three phases</span>**. The first and last of these, Jan2013-Jul2014 and Jan2015-Jul2107 respectively, show stabilised trends with ups and downs. However, in the second phase, Jul2014-Jan2015, oil prices decrease considerably. \n"
-    "- Now, taking into account the issue of missing values for oil price, we are going to fill them by **<span style='color:#F1C40F'>backward fill technique</span>**. That means filling missing values with next data point (Forward filling means fill missing values with previous data", unsafe_allow_html=True)
-
 
 def distribution_updrs1():
     target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
@@ -351,9 +264,6 @@ def distribution_updrs1():
     )
 
     st.plotly_chart(fig)
-    st.markdown(":pencil: **Interpret:**\n" 
-    "- As can be seen in the graph above, we can divide the oil price trend into **<span style='color:#F1C40F'>three phases</span>**. The first and last of these, Jan2013-Jul2014 and Jan2015-Jul2107 respectively, show stabilised trends with ups and downs. However, in the second phase, Jul2014-Jan2015, oil prices decrease considerably. \n"
-    "- Now, taking into account the issue of missing values for oil price, we are going to fill them by **<span style='color:#F1C40F'>backward fill technique</span>**. That means filling missing values with next data point (Forward filling means fill missing values with previous data", unsafe_allow_html=True)
 
 def distribution_updrs2():
     target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
@@ -381,9 +291,6 @@ def distribution_updrs2():
     )
 
     st.plotly_chart(fig)
-    st.markdown(":pencil: **Interpret:**\n" 
-    "- As can be seen in the graph above, we can divide the oil price trend into **<span style='color:#F1C40F'>three phases</span>**. The first and last of these, Jan2013-Jul2014 and Jan2015-Jul2107 respectively, show stabilised trends with ups and downs. However, in the second phase, Jul2014-Jan2015, oil prices decrease considerably. \n"
-    "- Now, taking into account the issue of missing values for oil price, we are going to fill them by **<span style='color:#F1C40F'>backward fill technique</span>**. That means filling missing values with next data point (Forward filling means fill missing values with previous data", unsafe_allow_html=True)
 
 def distribution_updrs3():
     target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
@@ -411,9 +318,6 @@ def distribution_updrs3():
     )
 
     st.plotly_chart(fig)
-    st.markdown(":pencil: **Interpret:**\n" 
-    "- As can be seen in the graph above, we can divide the oil price trend into **<span style='color:#F1C40F'>three phases</span>**. The first and last of these, Jan2013-Jul2014 and Jan2015-Jul2107 respectively, show stabilised trends with ups and downs. However, in the second phase, Jul2014-Jan2015, oil prices decrease considerably. \n"
-    "- Now, taking into account the issue of missing values for oil price, we are going to fill them by **<span style='color:#F1C40F'>backward fill technique</span>**. That means filling missing values with next data point (Forward filling means fill missing values with previous data", unsafe_allow_html=True)
 
 def distribution_updrs4():
     target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
@@ -441,9 +345,6 @@ def distribution_updrs4():
     )
 
     st.plotly_chart(fig)
-    st.markdown(":pencil: **Interpret:**\n" 
-    "- As can be seen in the graph above, we can divide the oil price trend into **<span style='color:#F1C40F'>three phases</span>**. The first and last of these, Jan2013-Jul2014 and Jan2015-Jul2107 respectively, show stabilised trends with ups and downs. However, in the second phase, Jul2014-Jan2015, oil prices decrease considerably. \n"
-    "- Now, taking into account the issue of missing values for oil price, we are going to fill them by **<span style='color:#F1C40F'>backward fill technique</span>**. That means filling missing values with next data point (Forward filling means fill missing values with previous data", unsafe_allow_html=True)
 
 def create_null_value_pie_charts_1():
     target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
@@ -497,9 +398,6 @@ def create_null_value_pie_charts_1():
     fig1 = create_pie_chart(values_train_clinical_data, labels_train_clinical_data,
                             "Train Clinical Data Null Value Analysis")
     st.plotly_chart(fig1)
-    st.markdown(":pencil: **Interpret:**\n" 
-    "- As can be seen in the graph above, we can divide the oil price trend into **<span style='color:#F1C40F'>three phases</span>**. The first and last of these, Jan2013-Jul2014 and Jan2015-Jul2107 respectively, show stabilised trends with ups and downs. However, in the second phase, Jul2014-Jan2015, oil prices decrease considerably. \n"
-    "- Now, taking into account the issue of missing values for oil price, we are going to fill them by **<span style='color:#F1C40F'>backward fill technique</span>**. That means filling missing values with next data point (Forward filling means fill missing values with previous data", unsafe_allow_html=True)
 
 def create_null_value_pie_charts_2():
 
@@ -552,11 +450,6 @@ def create_null_value_pie_charts_2():
     st.markdown("<h4 style='text-align: center; color: black;'>Supplemental Clinical Data </span>", unsafe_allow_html=True)
     fig4 = create_pie_chart(values_supplemental_clinical_data, labels_supplemental_clinical_data, "Supplemental Clinical Data Null Value Analysis")
     st.plotly_chart(fig4)
-    st.markdown(":pencil: **Interpret:**\n" 
-    "- As can be seen in the graph above, we can divide the oil price trend into **<span style='color:#F1C40F'>three phases</span>**. The first and last of these, Jan2013-Jul2014 and Jan2015-Jul2107 respectively, show stabilised trends with ups and downs. However, in the second phase, Jul2014-Jan2015, oil prices decrease considerably. \n"
-    "- Now, taking into account the issue of missing values for oil price, we are going to fill them by **<span style='color:#F1C40F'>backward fill technique</span>**. That means filling missing values with next data point (Forward filling means fill missing values with previous data", unsafe_allow_html=True)
-
-
 
 def run_eda():
     target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
@@ -593,6 +486,10 @@ def run_eda():
         distribution_updrs3()
     elif submenu2 == 'Updrs-Distribution 4':
         distribution_updrs4()
+
+    st.markdown(":pencil: **Interpret:**\n" 
+    "- UPDRS parts 1 and 4 scores appear **<span style='color:#F1C40F'>to have a fairly similar</span>**. distribution between the Train Clinical Data source and the Supplemental Clinical Data source. \n"
+    "- UPDRS part 2 and 3 scores **<span style='color:#F1C40F'>have a much higher percentage of zero-based</span>**. scores in the clinical data when compared to the supplemental data source. ", unsafe_allow_html=True)
 
     st.markdown("<hr>", unsafe_allow_html=True)
 
