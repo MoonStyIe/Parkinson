@@ -9,6 +9,7 @@ from utils import load_data
 import streamlit as st
 import plotly.express as px
 import pandas as pd
+import numpy as np
 from plotly.subplots import make_subplots
 
 
@@ -488,10 +489,6 @@ def run_eda():
     st.markdown(
         "<h1 style='text-align: center; color: darkblue;'>Parkinson's </span><span style='text-align: center; color: darkmagenta;'>Exploratory Data Analysis</span>",
         unsafe_allow_html=True)
-    # if submenu == 'Charts':
-    #     show_chart(target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test)
-    # else:
-    #     pass
 
     submenu1 = st.selectbox("⏏️ Updrs-Medication", ['Updrs-Medication 1', 'Updrs-Medication 2', 'Updrs-Medication 3', 'Updrs-Medication 4'])
 
@@ -544,33 +541,7 @@ def run_eda():
     with st.expander("Rows with null value"):
         null_info()
 
-    # st.markdown(":bulb: **Rows with one null value:**\n"
-    # "- If there is a single null value in a row, it is generally confirmed that **<span style='color:#F1C40F'>MEDICATION column</span>** is null. \n"
-    # "- The data in the medication column is **<span style='color:#F1C40F'>ON, OFF categorical data</span>** The column checks for **<span style='color:#F1C40F'>medication status.</span>** \n"
-    # "- The other two instances of null value counts occur 7 times in UPDRS_3 and 21 times in UPDRS_4. \n"
-    # "- Part 3 of the UPDRS assessment is about motor assessment and the minimum score is 0. \n"
-    # "- Part 4 of the UPDRS assessment is about exercise complications and again has a minimum score of 0. \n"
-    # "- These columns indicate that no assessment was performed **<span style='color:#F1C40F'>This is important because a score of 0 means that the patient was assessed and considered to have a normal response.</span>**",
-    # unsafe_allow_html=True)
-    #
-    # st.markdown(":bulb: **Rows with two null value:**\n"
-    # "- If a row has two null values, this usually corresponds to **<span style='color:#F1C40F'>UPDRS_4 and MEDICATION.</span>** \n"
-    # "- The null values are important here because, as mentioned earlier, valid responses are either on or off, so the evaluation can't be sure whether or not it failed to capture the **<span style='color:#F1C40F'>medication</span>** status. \n"
-    # "- Most of the other null value fields occur in UPDRS_4, which is related to motor complications. Other null values occur infrequently in the UPDRS_3 and UPDRS_2 fields. \n"
-    # "- Again, UPDRS part 3 is about motor assessment **<span style='color:#F1C40F'>where a null value cannot be assumed to be a score of 0, as 0 represents normal function.</span>** \n"
-    # "- In UPDRS part 2, the assessment is about the experience of exercise in daily life, and a null value here could indicate that no assessment was performed. \n",
-    # unsafe_allow_html=True)
-    #
-    # st.markdown(":bulb: **Rows with three null value:**\n"
-    # "- There are 10 instances where a row contains 3 null values. \n"
-    # "- In each instance, the row has no information for UPDRS_3, UPDRS_4, and MEDICATION **<span style='color:#F1C40F'>Again, missing values cannot be assumed to be zero.</span>** \n",
-    # unsafe_allow_html=True)
-    #
-    # st.markdown(":bulb: **Rows with four null value:**\n"
-    # "- There is only a **<span style='color:#F1C40F'>single</span>** instance of a row with four null values. \n"
-    # "- It appears that **<span style='color:#F1C40F'>only the UPDRS Part 3 assessment was performed during the visit.</span>** \n"
-    # "- Again, since a 0-based score represents a normal response, **<span style='color:#F1C40F'>null values cannot be interpreted as 0.</span>**",
-    # unsafe_allow_html=True)
+    # def plot_correlation_heatmap1()
 
 
 
