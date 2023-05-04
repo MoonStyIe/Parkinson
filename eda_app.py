@@ -474,6 +474,10 @@ def run_eda():
     elif submenu1 == 'Updrs-Medication 4':
         run_medication4()
 
+    st.markdown(":pencil: **Interpret:**\n"
+    "- In the graph above, we can see that the patients who took the medication increased their **<span style='color:#F1C40F'>scores more slowly</span>**. than the patients who did not take the medication. \n",
+    unsafe_allow_html=True)
+
     st.markdown("<hr>", unsafe_allow_html=True)
 
     submenu2 = st.selectbox("⏏️ Updrs-Distribution", ['Updrs-Distribution 1', 'Updrs-Distribution 2', 'Updrs-Distribution 3', 'Updrs-Distribution 4'])
@@ -489,7 +493,8 @@ def run_eda():
 
     st.markdown(":pencil: **Interpret:**\n" 
     "- UPDRS parts 1 and 4 scores appear **<span style='color:#F1C40F'>to have a fairly similar</span>**. distribution between the Train Clinical Data source and the Supplemental Clinical Data source. \n"
-    "- UPDRS part 2 and 3 scores **<span style='color:#F1C40F'>have a much higher percentage of zero-based</span>**. scores in the clinical data when compared to the supplemental data source. ", unsafe_allow_html=True)
+    "- UPDRS part 2 and 3 scores **<span style='color:#F1C40F'>have a much higher percentage of zero-based</span>**. scores in the clinical data when compared to the supplemental data source. ",
+    unsafe_allow_html=True)
 
     st.markdown("<hr>", unsafe_allow_html=True)
 
