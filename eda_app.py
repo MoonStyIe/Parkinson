@@ -137,7 +137,7 @@ def run_medication():
         jitter=0,
         pointpos=0,
         boxmean=True,
-        marker=dict(color='dimgray')
+        marker=dict(color='royalblue')
     ))
 
     fig.update_layout(
@@ -175,7 +175,7 @@ def run_medication2():
         jitter=0,
         pointpos=0,
         boxmean=True,
-        marker=dict(color='cornflowerblue')
+        marker=dict(color='red')
     ))
 
     # updrs_2_OFF
@@ -187,7 +187,7 @@ def run_medication2():
         jitter=0,
         pointpos=0,
         boxmean=True,
-        marker=dict(color='dimgray')
+        marker=dict(color='royalblue')
     ))
 
     fig.update_layout(
@@ -226,7 +226,7 @@ def run_medication3():
             jitter=0,
             pointpos=0,
             boxmean=True,
-            marker=dict(color='cornflowerblue')
+            marker=dict(color='red')
     ))
 
     # updrs_3_OFF
@@ -238,7 +238,7 @@ def run_medication3():
             jitter=0,
             pointpos=0,
             boxmean=True,
-            marker=dict(color='dimgray')
+            marker=dict(color='royalblue')
     ))
 
     fig.update_layout(
@@ -277,7 +277,7 @@ def run_medication4():
         jitter=0,
         pointpos=0,
         boxmean=True,
-        marker=dict(color='fuchsia')
+        marker=dict(color='red')
     ))
 
     # updrs_4_OFF
@@ -289,7 +289,7 @@ def run_medication4():
         jitter=0,
         pointpos=0,
         boxmean=True,
-        marker=dict(color='dimgray')
+        marker=dict(color='royalblue')
     ))
 
     fig.update_layout(
