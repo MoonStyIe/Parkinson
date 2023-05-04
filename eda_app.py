@@ -535,7 +535,7 @@ def run_eda():
 
     st.markdown(":pencil: **Interpret:**\n"
                 "- There are no missing values in the train_peptides and train_protiens datasets. \n"
-                "- The null values in the data were checked in train_clinical_data and supplemental_clinical_data **<span style='color:#F1C40F'>the analysis of the number of nulls in each row is shown below.</span>** ",
+                "- The null values in the data were checked in train_clinical_data and supplemental_clinical_data **<span style='color:#F1C40F'>the analysis of the number of nulls in each row is shown above.</span>** ",
                 unsafe_allow_html=True)
 
     with st.expander("Rows with null value"):
