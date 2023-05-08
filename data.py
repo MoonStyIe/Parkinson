@@ -21,7 +21,6 @@ def load_data():
 
     # test
     test_comp_dir = Path('data/test')
-
     test_peptides = pd.read_csv(test_comp_dir / 'test_peptides.csv')
     test_proteins = pd.read_csv(test_comp_dir / 'test_proteins.csv')
     sample_submission = pd.read_csv(test_comp_dir / 'sample_submission.csv')

@@ -683,6 +683,58 @@ def protein_cv_2():
     "- The top five protein coefficient of variation (CV) values and the number of visit months for patients based on whether they were taking medication or not. We don't know from this whether the top 5 protein CVs are correlated with the number of visits, but overall, people on medication have more visits than people off medication or unknown. people who were not on the drug or unknown.",
     unsafe_allow_html=True)
 
+def plot_mean_updrs_scores():
+    target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
+    grouped_data = target.groupby('visit_month').mean()[['updrs_1', 'updrs_2', 'updrs_3', 'updrs_4']]
+    colors = ['#FF5733', '#C70039', '#900C3F', '#581845']
+
+    fig, axs = plt.subplots(nrows=2, ncols=2, figsize=(12, 8))
+    for i, ax in enumerate(axs.flatten()):
+        sns.regplot(x=grouped_data.index, y=grouped_data.iloc[:, i], color=colors[i], ax=ax, label=f'UPDRS {i+1}')
+        sns.rugplot(target[f'updrs_{i+1}'], height=0.2, ax=ax, color=colors[i])
+        ax.set(title=f'Mean UPDRS {i+1} Scores by Visit Month', xlabel='Visit Month', ylabel='Average Score')
+        ax.legend()
+    fig.tight_layout()
+    st.pyplot(fig)
+
+
+def plot_mean_updrs_scores_1():
+    target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
+    grouped_data = target[['visit_month', 'updrs_1', 'updrs_2', 'updrs_3', 'updrs_4']].apply(pd.to_numeric,
+                                                                                             errors='coerce').groupby(
+        'visit_month').mean()
+    colors = ['#FF5733', '#C70039', '#900C3F', '#581845']
+
+    fig, axs = plt.subplots(nrows=2, ncols=2, figsize=(12, 8))
+    fig.suptitle('Mean Updrs Score_1', fontsize=20, fontweight='bold', x=0.52, y=0.98)
+    for i, ax in enumerate(axs.flatten()):
+        sns.regplot(x=grouped_data.index, y=grouped_data.iloc[:, i], color=colors[i], ax=ax, label=f'UPDRS {i + 1}')
+        target[f'updrs_{i + 1}'] = pd.to_numeric(target[f'updrs_{i + 1}'], errors='coerce')
+        sns.rugplot(target[f'updrs_{i + 1}'], height=0.2, ax=ax, color=colors[i])
+        ax.set(title=f'Mean UPDRS {i + 1} Scores by Visit Month', xlabel='Visit Month', ylabel='Average Score')
+        ax.legend()
+    fig.tight_layout()
+    st.pyplot(fig)
+
+
+def plot_mean_updrs_scores_2():
+    target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
+    grouped_data = sup_target[['visit_month', 'updrs_1', 'updrs_2', 'updrs_3', 'updrs_4']].apply(pd.to_numeric,
+                                                                                                 errors='coerce').groupby(
+        'visit_month').mean()
+    colors = ['#FF5733', '#C70039', '#900C3F', '#581845']
+
+    fig, axs = plt.subplots(nrows=2, ncols=2, figsize=(12, 8))
+    fig.suptitle('Mean Updrs Score_2', fontsize=20, fontweight='bold', x=0.52, y=0.98)
+    for i, ax in enumerate(axs.flatten()):
+        sns.regplot(x=grouped_data.index, y=grouped_data.iloc[:, i], color=colors[i], ax=ax, label=f'UPDRS {i + 1}')
+        sup_target[f'updrs_{i + 1}'] = pd.to_numeric(sup_target[f'updrs_{i + 1}'], errors='coerce')
+        sns.rugplot(sup_target[f'updrs_{i + 1}'], height=0.2, ax=ax, color=colors[i])
+        ax.set(title=f'Mean UPDRS {i + 1} Scores by Visit Month', xlabel='Visit Month', ylabel='Average Score')
+        ax.legend()
+    fig.tight_layout()
+    st.pyplot(fig)
+
 def submenu_1():
     target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
 
@@ -727,7 +779,16 @@ def submenu_1():
                 "- In the graph above, The UPDRS[1-4] score increases overall as the visit month progresses.",
                 unsafe_allow_html=True)
 
+
 def submenu_2():
+    submenu = st.selectbox("⏏️ Mean UDPRS Score", ['Mean_Updrs_Scores_1', 'Mean_Updrs_Scores_2'])
+
+    if submenu == 'Mean_Updrs_Scores_1':
+        plot_mean_updrs_scores_1()
+    elif submenu == 'Mean_Updrs_Scores_2':
+        plot_mean_updrs_scores_2()
+
+def submenu_3():
     submenu3 = st.selectbox("⏏️ Null Value Analysis", ['Train Clinical Data', 'Supplemental Clinical Data'])
 
     if submenu3 == 'Train Clinical Data':
@@ -743,7 +804,7 @@ def submenu_2():
     with st.expander("Rows with null value"):
         null_info()
 
-def submenu_3():
+def submenu_4():
     submenu1 = st.selectbox("⏏️ Updrs-Medication",
                             ['Updrs-Medication 1', 'Updrs-Medication 2', 'Updrs-Medication 3', 'Updrs-Medication 4'])
 
@@ -760,7 +821,7 @@ def submenu_3():
     "- In the graph above, we can see that the patients who took the medication increased their **<span style='color:#F1C40F'>scores more slowly</span>** than the patients who did not take the medication. \n",
     unsafe_allow_html=True)
 
-def submenu_4():
+def submenu_5():
     submenu2 = st.selectbox("⏏️ Updrs-Distribution", ['Updrs-Distribution 1', 'Updrs-Distribution 2', 'Updrs-Distribution 3', 'Updrs-Distribution 4'])
 
     if submenu2 == 'Updrs-Distribution 1':
@@ -776,13 +837,17 @@ def submenu_4():
     "- UPDRS parts 1 and 4 scores appear **<span style='color:#F1C40F'>to have a fairly similar</span>** distribution between the Train Clinical Data source and the Supplemental Clinical Data source. \n"
     "- UPDRS part 2 and 3 scores **<span style='color:#F1C40F'>have a much higher percentage of zero-based</span>** scores in the clinical data when compared to the supplemental data source. ",
     unsafe_allow_html=True)
-def submenu_5():
+def submenu_6():
     submenu = st.selectbox("⏏️ Analyzing the Relationship Between Attributes for Train_Data", ['Heat Map_1', 'Heat Map_2'])
 
     if submenu == 'Heat Map_1':
         plot_correlation_heatmap1()
     elif submenu == 'Heat Map_2':
         plot_correlation_heatmap2()
+
+    st.markdown(":pencil: **Interpret:**\n"
+    "- Checking the graph above, All four score columns are poorly correlated with the visit_month column, but (UPDRS_1 score and UPDRS_2) and (UPDRS_2 score and UPDRS_3) are correlated. This suggests that the symptoms of the disease are closely related as they all affect motor function.",
+    unsafe_allow_html=True)
 
 def submenu2_1():
     # NPX
@@ -872,13 +937,15 @@ def run_eda():
         submenu_4()
         st.write('<hr>', unsafe_allow_html=True)
         submenu_5()
+        st.write('<hr>', unsafe_allow_html=True)
+        plot_mean_updrs_scores()
 
     elif submenu == 'Protein / Peptide':
         submenu2_1()
         st.write('<hr>', unsafe_allow_html=True)
         submenu2_2()
         st.write('<hr>', unsafe_allow_html=True)
-        submenu2_3()
+        # submenu2_3()
         st.write('<hr>', unsafe_allow_html=True)
         submenu2_4()
 
