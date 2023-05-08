@@ -569,6 +569,119 @@ def null_info():
     "- Again, since a 0-based score represents a normal response, **<span style='color:#F1C40F'>null values cannot be interpreted as 0.</span>**",
     unsafe_allow_html=True)
 
+def plot_correlation_heatmap1():
+    # calculate the correlation matrix
+    # target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
+    target = pd.read_csv('data/train/train_clinical_data.csv')
+    target.drop('upd23b_clinical_state_on_medication', axis=1, inplace=True)
+    df_corr = target.corr()
+
+    # create a heatmap figure
+    fig = go.Figure()
+    fig.add_trace(
+        go.Heatmap(
+            x=df_corr.columns,
+            y=df_corr.index,
+            z=np.array(df_corr),
+            text=df_corr.values,
+            texttemplate='%{text:.2f}',
+            colorscale='sunset'
+        )
+    )
+
+    # update the layout
+    fig.update_layout(
+        title={
+            'text': 'Analyzing the Relationship Between Attributes for Supplemental Clinical Data',
+            'y': 0.9,
+            'x': 0.5,
+            'xanchor': 'center',
+            'yanchor': 'top',
+            'font': dict(size=20)
+        },
+    )
+
+    # show the figure
+    st.plotly_chart(fig)
+
+
+def plot_correlation_heatmap2():
+    # calculate the correlation matrix
+    target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
+    sup_target.drop('upd23b_clinical_state_on_medication', axis=1, inplace=True)
+    df_corr = sup_target.corr()
+
+    # create a heatmap figure
+    fig = go.Figure()
+    fig.add_trace(
+        go.Heatmap(
+            x=df_corr.columns,
+            y=df_corr.index,
+            z=np.array(df_corr),
+            text=df_corr.values,
+            texttemplate='%{text:.2f}',
+            colorscale='sunset'
+        )
+    )
+
+    # update the layout
+    fig.update_layout(
+        title={
+            'text': 'Analyzing the Relationship Between Attributes for Supplemental Clinical Data',
+            'y': 0.9,
+            'x': 0.5,
+            'xanchor': 'center',
+            'yanchor': 'top',
+            'font': dict(size=20)
+        },
+    )
+
+    # show the figure
+    st.plotly_chart(fig)
+
+def protein_cv_1():
+    target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
+    proteins_agg = train_proteins[['patient_id','UniProt','NPX']]
+    proteins_agg = proteins_agg.groupby(['patient_id','UniProt'])['NPX'].aggregate(['mean','std'])
+    proteins_agg['CV_NPX[%]'] = proteins_agg['std'] / proteins_agg['mean']*100
+    NPX_cv_mean = proteins_agg.groupby('UniProt')['CV_NPX[%]'].mean().reset_index()
+    NPX_cv_mean = NPX_cv_mean.sort_values(by='CV_NPX[%]', ascending=False).reset_index(drop=True)
+
+    protein_cv_top5 = NPX_cv_mean[:5]['UniProt']
+    protein_agg_top5 = proteins_agg.query('UniProt in @protein_cv_top5').reset_index()
+
+    for i, protein in enumerate(protein_cv_top5):
+        index = protein_agg_top5.query(f'UniProt=="{protein}"').index
+        protein_agg_top5.loc[index, 'order'] = i
+    protein_agg_top5.sort_values(by='order', inplace=True)
+
+    fig = px.violin(protein_agg_top5, y='UniProt', x='CV_NPX[%]', color='UniProt',
+                    box=True, title='<b>Coeffcient of Variation for NPX (Top 5)',
+                    width=800, height=600)
+    fig.update_layout(template='plotly_dark',
+                      showlegend=False,
+                      xaxis=dict(title='Coeffcient of Variation [%] of NPX per patient_id',
+                                 title_standoff=25),
+                      title={
+                          'text': 'Distribution of Coefficient of Variation [%] of NPX per Patient',
+                          'x': 0.5,
+                          'y': 0.9,
+                          'xanchor': 'center',
+                          'font': dict(size=20)
+                      },
+                      )
+
+    st.plotly_chart(fig)
+
+    st.markdown(":pencil: **Interpret:**\n" 
+    "- group by patient_id and UniProt columns, and then get the mean and standard deviation of NPX. Then, use the standard deviation and mean to get the coefficient of variation (CV) value, and list only the top 5 UniProt in the List only the top 5 UniProt. The higher the value in the graph, the greater the NPX variation of the UniProt.",
+    unsafe_allow_html=True)
+
+def protein_cv_2():
+
+    st.markdown(":pencil: **Interpret:**\n" 
+    "- The top five protein coefficient of variation (CV) values and the number of visit months for patients based on whether they were taking medication or not. We don't know from this whether the top 5 protein CVs are correlated with the number of visits, but overall, people on medication have more visits than people off medication or unknown. people who were not on the drug or unknown.",
+    unsafe_allow_html=True)
 
 def submenu_1():
     target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
@@ -663,6 +776,13 @@ def submenu_4():
     "- UPDRS parts 1 and 4 scores appear **<span style='color:#F1C40F'>to have a fairly similar</span>** distribution between the Train Clinical Data source and the Supplemental Clinical Data source. \n"
     "- UPDRS part 2 and 3 scores **<span style='color:#F1C40F'>have a much higher percentage of zero-based</span>** scores in the clinical data when compared to the supplemental data source. ",
     unsafe_allow_html=True)
+def submenu_5():
+    submenu = st.selectbox("⏏️ Analyzing the Relationship Between Attributes for Train_Data", ['Heat Map_1', 'Heat Map_2'])
+
+    if submenu == 'Heat Map_1':
+        plot_correlation_heatmap1()
+    elif submenu == 'Heat Map_2':
+        plot_correlation_heatmap2()
 
 def submenu2_1():
     # NPX
@@ -727,116 +847,15 @@ def submenu2_3():
 
         st.plotly_chart(fig)
 
-def plot_correlation_heatmap1():
-    # calculate the correlation matrix
-    target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
-    target.drop('upd23b_clinical_state_on_medication', axis=1, inplace=True)
-    df_corr = target.corr()
-
-    # create a heatmap figure
-    fig = go.Figure()
-    fig.add_trace(
-        go.Heatmap(
-            x=df_corr.columns,
-            y=df_corr.index,
-            z=np.array(df_corr),
-            text=df_corr.values,
-            texttemplate='%{text:.2f}',
-            colorscale='sunset'
-        )
-    )
-
-    # update the layout
-    fig.update_layout(
-        title={
-            'text': 'Analyzing the Relationship Between Attributes for Supplemental Clinical Data',
-            'y': 0.9,
-            'x': 0.5,
-            'xanchor': 'center',
-            'yanchor': 'top',
-            'font': dict(size=20)
-        },
-    )
-
-    # show the figure
-    st.plotly_chart(fig)
-
-
-def plot_correlation_heatmap2():
-    # calculate the correlation matrix
-    target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
-    sup_target.drop('upd23b_clinical_state_on_medication', axis=1, inplace=True)
-    df_corr = sup_target.corr()
-
-    # create a heatmap figure
-    fig = go.Figure()
-    fig.add_trace(
-        go.Heatmap(
-            x=df_corr.columns,
-            y=df_corr.index,
-            z=np.array(df_corr),
-            text=df_corr.values,
-            texttemplate='%{text:.2f}',
-            colorscale='sunset'
-        )
-    )
-
-    # update the layout
-    fig.update_layout(
-        title={
-            'text': 'Analyzing the Relationship Between Attributes for Supplemental Clinical Data',
-            'y': 0.9,
-            'x': 0.5,
-            'xanchor': 'center',
-            'yanchor': 'top',
-            'font': dict(size=20)
-        },
-    )
-
-    # show the figure
-    st.plotly_chart(fig)
-
-
 def submenu2_4():
-    target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
-    proteins_agg = train_proteins[['patient_id','UniProt','NPX']]
-    proteins_agg = proteins_agg.groupby(['patient_id','UniProt'])['NPX'].aggregate(['mean','std'])
-    proteins_agg['CV_NPX[%]'] = proteins_agg['std'] / proteins_agg['mean']*100
-    NPX_cv_mean = proteins_agg.groupby('UniProt')['CV_NPX[%]'].mean().reset_index()
-    NPX_cv_mean = NPX_cv_mean.sort_values(by='CV_NPX[%]', ascending=False).reset_index(drop=True)
+    submenu = st.selectbox("⏏️ Protein CV", ['Protein CV', 'Protein CV & upd23b_clinical_state_on_medication'])
 
-    protein_cv_top5 = NPX_cv_mean[:5]['UniProt']
-    protein_agg_top5 = proteins_agg.query('UniProt in @protein_cv_top5').reset_index()
-
-    for i, protein in enumerate(protein_cv_top5):
-        index = protein_agg_top5.query(f'UniProt=="{protein}"').index
-        protein_agg_top5.loc[index, 'order'] = i
-    protein_agg_top5.sort_values(by='order', inplace=True)
-
-    fig = px.violin(protein_agg_top5, y='UniProt', x='CV_NPX[%]', color='UniProt',
-                    box=True, title='<b>Coeffcient of Variation for NPX (Top 5)',
-                    width=800, height=600)
-    fig.update_layout(template='plotly_dark',
-                      showlegend=False,
-                      xaxis=dict(title='Coeffcient of Variation [%] of NPX per patient_id',
-                                 title_standoff=25),
-                      title={
-                          'text': 'Distribution of Coefficient of Variation [%] of NPX per Patient',
-                          'x': 0.5,
-                          'y': 0.9,
-                          'xanchor': 'center',
-                          'font': dict(size=20)
-                      },
-                      )
-
-    st.plotly_chart(fig)
-
-    st.markdown(":pencil: **Interpret:**\n" 
-    "- group by patient_id and UniProt columns, and then get the mean and standard deviation of NPX. Then, use the standard deviation and mean to get the coefficient of variation (CV) value, and list only the top 5 UniProt in the List only the top 5 UniProt. The higher the value in the graph, the greater the NPX variation of the UniProt.",
-    unsafe_allow_html=True)
+    if submenu == 'Protein CV':
+        protein_cv_1()
+    elif submenu == 'Protein CV & upd23b_clinical_state_on_medication':
+        protein_cv_2()
 
 def run_eda():
-    target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
     st.markdown(
         "<h1 style='text-align: center; color: darkblue;'>Parkinson's </span><span style='text-align: center; color: darkmagenta;'>Exploratory Data Analysis</span>",
         unsafe_allow_html=True)
@@ -852,16 +871,14 @@ def run_eda():
         st.write('<hr>', unsafe_allow_html=True)
         submenu_4()
         st.write('<hr>', unsafe_allow_html=True)
-        # plot_correlation_heatmap1()
-        st.write('<hr>', unsafe_allow_html=True)
-        plot_correlation_heatmap2()
+        submenu_5()
 
     elif submenu == 'Protein / Peptide':
         submenu2_1()
         st.write('<hr>', unsafe_allow_html=True)
         submenu2_2()
         st.write('<hr>', unsafe_allow_html=True)
-        # submenu2_3()
+        submenu2_3()
         st.write('<hr>', unsafe_allow_html=True)
         submenu2_4()
 
