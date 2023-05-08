@@ -400,8 +400,47 @@ def create_null_value_pie_charts_1():
         )
         return fig
 
-    st.markdown("<h4 style='text-align: center; color: black;'>Train Clinical Data </span>", unsafe_allow_html=True)
-    fig1 = create_pie_chart(values_train_clinical_data, labels_train_clinical_data, "Train Clinical Data Null Value Analysis", rotation=330)
+    fig1 = create_pie_chart(values_train_clinical_data, labels_train_clinical_data,
+                            "Train Clinical Data Null Value Analysis", rotation=330)
+
+    fig1.update_layout(
+        title={
+            'text': "Train Clinical Data Null Value Analysis",
+            'y': 0.98,
+            'x': 0.5,
+            'xanchor': 'center',
+            'yanchor': 'top'},
+        margin=dict(t=50, b=0),
+        height=600,
+        width=800,
+        xaxis=dict(
+            showline=True,
+            showgrid=True,
+            showticklabels=False,
+            linecolor='rgb(204, 204, 204)',
+            linewidth=2,
+            ticks='outside',
+            tickfont=dict(
+                family='Arial',
+                size=12,
+                color='rgb(82, 82, 82)',
+            ),
+        ),
+        yaxis=dict(
+            showline=True,
+            showgrid=True,
+            showticklabels=False,
+            linecolor='rgb(204, 204, 204)',
+            linewidth=2,
+            ticks='outside',
+            tickfont=dict(
+                family='Arial',
+                size=12,
+                color='rgb(82, 82, 82)',
+            ),
+        )
+    )
+
     st.plotly_chart(fig1)
 
 def create_null_value_pie_charts_2():
@@ -456,8 +495,49 @@ def create_null_value_pie_charts_2():
         )
         return fig
 
-    st.markdown("<h4 style='text-align: center; color: black;'>Supplemental Clinical Data </span>", unsafe_allow_html=True)
-    fig4 = create_pie_chart(values_supplemental_clinical_data, labels_supplemental_clinical_data, "Supplemental Clinical Data Null Value Analysis")
+    # st.markdown("<h4 style='text-align: center; color: black;'>Supplemental Clinical Data </span>", unsafe_allow_html=True)
+    # fig4 = create_pie_chart(values_supplemental_clinical_data, labels_supplemental_clinical_data, "Supplemental Clinical Data Null Value Analysis")
+    fig4 = create_pie_chart(values_supplemental_clinical_data, labels_supplemental_clinical_data,
+                            "Train Clinical Data Null Value Analysis", rotation=330)
+
+    fig4.update_layout(
+        title={
+            'text': "Supplemental Clinical Data Null Value Analysis",
+            'y': 0.98,
+            'x': 0.5,
+            'xanchor': 'center',
+            'yanchor': 'top'},
+        margin=dict(t=50, b=0),
+        height=600,
+        width=800,
+        xaxis=dict(
+            showline=True,
+            showgrid=True,
+            showticklabels=False,
+            linecolor='rgb(204, 204, 204)',
+            linewidth=2,
+            ticks='outside',
+            tickfont=dict(
+                family='Arial',
+                size=12,
+                color='rgb(82, 82, 82)',
+            ),
+        ),
+        yaxis=dict(
+            showline=True,
+            showgrid=True,
+            showticklabels=False,
+            linecolor='rgb(204, 204, 204)',
+            linewidth=2,
+            ticks='outside',
+            tickfont=dict(
+                family='Arial',
+                size=12,
+                color='rgb(82, 82, 82)',
+            ),
+        )
+    )
+
     st.plotly_chart(fig4)
 
 def null_info():
@@ -520,11 +600,11 @@ def submenu_1():
     fig.update_layout(
         title={
         'text':'Mean UPDRS Scores by Visit Month',
-        'font':{'size':20}
+        'font':{'size':16}
         },
         height=800,
         showlegend=False,
-        title_x=0.3,
+        title_x=0.35,
         title_y=0.97
     )
 
@@ -619,6 +699,142 @@ def submenu2_2():
     "- There is a lot of variation in the density of the peptides. The minimum, maximum, and standard deviation tell us that the density of peptides is highly dependent on the specific peptide we are looking at. So we can plot a kernel density estimate to see where most of the values lie ",
     unsafe_allow_html=True)
 
+
+def submenu2_3():
+    target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
+    merge_protein_clinical = pd.merge(target, train_proteins, on=['patient_id', 'visit_month'])
+
+    columns = ['updrs_1', 'updrs_2',
+               'updrs_3', 'updrs_4', 'UniProt', 'NPX']
+    columns_2 = ['UniProt', 'updrs_1', 'updrs_2',
+                 'updrs_3', 'updrs_4']
+    corr_matrix = merge_protein_clinical[columns].groupby('UniProt').corr().reset_index()
+    corr_matrix = corr_matrix[corr_matrix['level_1'] == 'NPX'][columns_2].reset_index(drop=True)
+    corr_matrix = corr_matrix.set_index('UniProt')
+
+    for index in range(0, corr_matrix.T.shape[1], 15):
+        fig = px.imshow(corr_matrix.T.iloc[:, index:index + 15], text_auto=True, color_continuous_scale='sunset')
+        fig.update_layout(
+            title={
+                'text': 'Correlation between 4 points with proteins',
+                'y': 0.99,
+                'x': 0.5,
+                'xanchor': 'center',
+                'yanchor': 'top',
+                'font': dict(size=20)
+            },
+        )
+
+        st.plotly_chart(fig)
+
+def plot_correlation_heatmap1():
+    # calculate the correlation matrix
+    target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
+    target.drop('upd23b_clinical_state_on_medication', axis=1, inplace=True)
+    df_corr = target.corr()
+
+    # create a heatmap figure
+    fig = go.Figure()
+    fig.add_trace(
+        go.Heatmap(
+            x=df_corr.columns,
+            y=df_corr.index,
+            z=np.array(df_corr),
+            text=df_corr.values,
+            texttemplate='%{text:.2f}',
+            colorscale='sunset'
+        )
+    )
+
+    # update the layout
+    fig.update_layout(
+        title={
+            'text': 'Analyzing the Relationship Between Attributes for Supplemental Clinical Data',
+            'y': 0.9,
+            'x': 0.5,
+            'xanchor': 'center',
+            'yanchor': 'top',
+            'font': dict(size=20)
+        },
+    )
+
+    # show the figure
+    st.plotly_chart(fig)
+
+
+def plot_correlation_heatmap2():
+    # calculate the correlation matrix
+    target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
+    sup_target.drop('upd23b_clinical_state_on_medication', axis=1, inplace=True)
+    df_corr = sup_target.corr()
+
+    # create a heatmap figure
+    fig = go.Figure()
+    fig.add_trace(
+        go.Heatmap(
+            x=df_corr.columns,
+            y=df_corr.index,
+            z=np.array(df_corr),
+            text=df_corr.values,
+            texttemplate='%{text:.2f}',
+            colorscale='sunset'
+        )
+    )
+
+    # update the layout
+    fig.update_layout(
+        title={
+            'text': 'Analyzing the Relationship Between Attributes for Supplemental Clinical Data',
+            'y': 0.9,
+            'x': 0.5,
+            'xanchor': 'center',
+            'yanchor': 'top',
+            'font': dict(size=20)
+        },
+    )
+
+    # show the figure
+    st.plotly_chart(fig)
+
+
+def submenu2_4():
+    target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
+    proteins_agg = train_proteins[['patient_id','UniProt','NPX']]
+    proteins_agg = proteins_agg.groupby(['patient_id','UniProt'])['NPX'].aggregate(['mean','std'])
+    proteins_agg['CV_NPX[%]'] = proteins_agg['std'] / proteins_agg['mean']*100
+    NPX_cv_mean = proteins_agg.groupby('UniProt')['CV_NPX[%]'].mean().reset_index()
+    NPX_cv_mean = NPX_cv_mean.sort_values(by='CV_NPX[%]', ascending=False).reset_index(drop=True)
+
+    protein_cv_top5 = NPX_cv_mean[:5]['UniProt']
+    protein_agg_top5 = proteins_agg.query('UniProt in @protein_cv_top5').reset_index()
+
+    for i, protein in enumerate(protein_cv_top5):
+        index = protein_agg_top5.query(f'UniProt=="{protein}"').index
+        protein_agg_top5.loc[index, 'order'] = i
+    protein_agg_top5.sort_values(by='order', inplace=True)
+
+    fig = px.violin(protein_agg_top5, y='UniProt', x='CV_NPX[%]', color='UniProt',
+                    box=True, title='<b>Coeffcient of Variation for NPX (Top 5)',
+                    width=800, height=600)
+    fig.update_layout(template='plotly_dark',
+                      showlegend=False,
+                      xaxis=dict(title='Coeffcient of Variation [%] of NPX per patient_id',
+                                 title_standoff=25),
+                      title={
+                          'text': 'Distribution of Coefficient of Variation [%] of NPX per Patient',
+                          'x': 0.5,
+                          'y': 0.9,
+                          'xanchor': 'center',
+                          'font': dict(size=20)
+                      },
+                      )
+
+    st.plotly_chart(fig)
+
+    st.markdown(":pencil: **Interpret:**\n" 
+    "- group by patient_id and UniProt columns, and then get the mean and standard deviation of NPX. Then, use the standard deviation and mean to get the coefficient of variation (CV) value, and list only the top 5 UniProt in the List only the top 5 UniProt. The higher the value in the graph, the greater the NPX variation of the UniProt.",
+    unsafe_allow_html=True)
+
 def run_eda():
     target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
     st.markdown(
@@ -635,10 +851,19 @@ def run_eda():
         submenu_3()
         st.write('<hr>', unsafe_allow_html=True)
         submenu_4()
+        st.write('<hr>', unsafe_allow_html=True)
+        # plot_correlation_heatmap1()
+        st.write('<hr>', unsafe_allow_html=True)
+        plot_correlation_heatmap2()
+
     elif submenu == 'Protein / Peptide':
         submenu2_1()
         st.write('<hr>', unsafe_allow_html=True)
         submenu2_2()
+        st.write('<hr>', unsafe_allow_html=True)
+        # submenu2_3()
+        st.write('<hr>', unsafe_allow_html=True)
+        submenu2_4()
 
 
 
