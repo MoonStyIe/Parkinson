@@ -937,8 +937,6 @@ def run_eda():
         submenu_4()
         st.write('<hr>', unsafe_allow_html=True)
         submenu_5()
-        st.write('<hr>', unsafe_allow_html=True)
-        plot_mean_updrs_scores()
 
     elif submenu == 'Protein / Peptide':
         submenu2_1()
