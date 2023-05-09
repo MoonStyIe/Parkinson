@@ -685,6 +685,150 @@ def plot_mean_updrs_scores_2():
     fig.tight_layout()
     st.pyplot(fig)
 
+def generate_corr_heatmap_protein_clinical():
+    target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
+    merge_protein_clinical = pd.merge(target, train_proteins, on=['patient_id', 'visit_month'])
+    columns = ['updrs_1', 'updrs_2', 'updrs_3', 'updrs_4', 'UniProt', 'NPX']
+    columns_2 = ['UniProt', 'updrs_1', 'updrs_2', 'updrs_3', 'updrs_4']
+
+    # 로그 변환 적용 (updrs_4=0인 경우에는 0.1을 더해줌)
+    log_merge_protein_clinical = merge_protein_clinical.copy()
+    num_cols = ['updrs_1', 'updrs_2', 'updrs_3', 'updrs_4']
+    log_merge_protein_clinical[num_cols] = np.log(merge_protein_clinical[num_cols] + 0.1) * (merge_protein_clinical[num_cols] == 0)
+
+    # 상관계수 계산
+    corr_matrix = log_merge_protein_clinical[columns].groupby('UniProt').corr().reset_index()
+    corr_matrix = corr_matrix[corr_matrix['level_1'] == 'NPX'][columns_2].reset_index(drop=True)
+    corr_matrix = corr_matrix.set_index('UniProt')
+
+    # 상관계수 절댓값 상위 5개 UniProt 추출
+    top_uniprot = corr_matrix.abs().mean(axis=1).sort_values(ascending=False).head(5).index.tolist()
+
+    # 상위 5개 UniProt에 대한 상관계수 행렬 추출
+    top_corr_matrix = corr_matrix.loc[top_uniprot, num_cols]
+
+    # Function to modify NPX label for heatmap annotations
+    def modify_npx_label(npx):
+        if npx < 0.01:
+            return "{:.4f}".format(npx)
+        elif npx < 0.1:
+            return "{:.3f}".format(npx)
+        elif npx < 1:
+            return "{:.2f}".format(npx)
+        else:
+            return "{:.1f}".format(npx)
+
+    # 상관계수 히트맵 생성
+    fig = go.Figure(data=go.Heatmap(
+        z=top_corr_matrix.values,
+        x=top_corr_matrix.columns.tolist(),
+        y=top_corr_matrix.index.tolist(),
+        # Invert colorscale
+        colorscale='sunset_r',
+        colorbar=dict(title='Correlation')
+    ))
+
+    # Add annotations to show correlation values
+    for i in range(len(top_corr_matrix.index)):
+        for j in range(len(top_corr_matrix.columns)):
+            fig.add_annotation(
+                x=top_corr_matrix.columns[j],
+                y=top_corr_matrix.index[i],
+                text=modify_npx_label(top_corr_matrix.iloc[i, j]),
+                showarrow=False,
+                font=dict(color='white' if abs(top_corr_matrix.iloc[i, j]) > 0.5 else 'black')
+            )
+
+    # Set layout
+    fig.update_layout(
+        title={
+            'text': 'Correlation between 4 points with top 5 proteins (log transformed)',
+            'y': 0.93,
+            'x': 0.5,
+            'xanchor': 'center',
+            'yanchor': 'top',
+            'font': dict(size=20)
+        },
+        xaxis={'title': 'Uprdrs[1-4]', 'tickformat': '.2s'},
+        yaxis={'title': 'UniProt', 'tickformat': '.2s'},
+        width=800, height=600,
+    )
+
+    # 출력
+    st.plotly_chart(fig)
+
+def generate_corr_heatmap_peptides_clinical():
+    target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
+    merge_peptides_clinical = pd.merge(target, train_peptides, on=['patient_id', 'visit_month'])
+    columns = ['updrs_1', 'updrs_2', 'updrs_3', 'updrs_4', 'UniProt', 'PeptideAbundance']
+    columns_2 = ['UniProt', 'updrs_1', 'updrs_2', 'updrs_3', 'updrs_4']
+
+    # 로그 변환 적용 (updrs_4=0인 경우에는 0.1을 더해줌)
+    log_merge_peptides_clinical = merge_peptides_clinical.copy()
+    num_cols = ['updrs_1', 'updrs_2', 'updrs_3', 'updrs_4']
+    log_merge_peptides_clinical[num_cols] = np.log(merge_peptides_clinical[num_cols] + 0.1) * (merge_peptides_clinical[num_cols] == 0)
+
+    # 상관계수 계산
+    corr_matrix = log_merge_peptides_clinical[columns].groupby('UniProt').corr().reset_index()
+    corr_matrix = corr_matrix[corr_matrix['level_1'] == 'PeptideAbundance'][columns_2].reset_index(drop=True)
+    corr_matrix = corr_matrix.set_index('UniProt')
+
+    # 상관계수 절댓값 상위 5개 UniProt 추출
+    top_uniprot = corr_matrix.abs().mean(axis=1).sort_values(ascending=False).head(5).index.tolist()
+
+    # 상위 5개 UniProt에 대한 상관계수 행렬 추출
+    top_corr_matrix = corr_matrix.loc[top_uniprot, num_cols]
+
+    # 농도 라벨 수정 함수
+    def modify_npx_label(npx):
+        if npx < 0.01:
+            return "{:.4f}".format(npx)
+        elif npx < 0.1:
+            return "{:.3f}".format(npx)
+        elif npx < 1:
+            return "{:.2f}".format(npx)
+        else:
+            return "{:.1f}".format(npx)
+
+    # 상관계수 히트맵 생성
+    fig = go.Figure(data=go.Heatmap(
+        z=top_corr_matrix.values,
+        x=top_corr_matrix.columns.tolist(),
+        y=top_corr_matrix.index.tolist(),
+        # 색상 반전
+        colorscale='sunset_r',  # _r 추가
+        colorbar=dict(title='Correlation')
+    ))
+
+    # 상관계수 값 표시
+    for i in range(len(top_corr_matrix.index)):
+        for j in range(len(top_corr_matrix.columns)):
+            fig.add_annotation(
+                x=top_corr_matrix.columns[j],
+                y=top_corr_matrix.index[i],
+                text=modify_npx_label(top_corr_matrix.iloc[i, j]),
+                showarrow=False,
+                font=dict(color='white' if abs(top_corr_matrix.iloc[i, j]) > 0.5 else 'black')
+            )
+
+    # Set layout
+    fig.update_layout(
+        title={
+            'text': 'Correlation between 4 points with top 5 peptides (log transformed)',
+            'y': 0.93,
+            'x': 0.5,
+            'xanchor': 'center',
+            'yanchor': 'top',
+            'font': dict(size=20)
+        },
+        xaxis={'title': 'Uprdrs[1-4]', 'tickformat': '.2s'},
+        yaxis={'title': 'UniProt', 'tickformat': '.2s'},
+        width=800, height=600,
+    )
+
+    # 출력
+    st.plotly_chart(fig)
+
 def submenu_1():
     target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
 
@@ -836,31 +980,13 @@ def submenu2_2():
 
 
 def submenu2_3():
-    target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
-    merge_protein_clinical = pd.merge(target, train_proteins, on=['patient_id', 'visit_month'])
+    submenu = st.selectbox("⏏️ Correlation between proteins and UPDRS scores (top 5 proteins)",
+                           ['Correlation between 4 points with top 5 proteins_1', 'Correlation between 4 points with top 5 peptides_2'])
 
-    columns = ['updrs_1', 'updrs_2',
-               'updrs_3', 'updrs_4', 'UniProt', 'NPX']
-    columns_2 = ['UniProt', 'updrs_1', 'updrs_2',
-                 'updrs_3', 'updrs_4']
-    corr_matrix = merge_protein_clinical[columns].groupby('UniProt').corr().reset_index()
-    corr_matrix = corr_matrix[corr_matrix['level_1'] == 'NPX'][columns_2].reset_index(drop=True)
-    corr_matrix = corr_matrix.set_index('UniProt')
-
-    for index in range(0, corr_matrix.T.shape[1], 15):
-        fig = px.imshow(corr_matrix.T.iloc[:, index:index + 15], text_auto=True, color_continuous_scale='sunset')
-        fig.update_layout(
-            title={
-                'text': 'Correlation between 4 points with proteins',
-                'y': 0.99,
-                'x': 0.5,
-                'xanchor': 'center',
-                'yanchor': 'top',
-                'font': dict(size=20)
-            },
-        )
-
-        st.plotly_chart(fig)
+    if submenu == 'Correlation between 4 points with top 5 proteins_1':
+        generate_corr_heatmap_protein_clinical()
+    elif submenu == 'Correlation between 4 points with top 5 peptides_2':
+        generate_corr_heatmap_peptides_clinical()
 
 def submenu2_4():
     submenu = st.selectbox("⏏️ Protein CV", ['Protein CV', 'Protein CV & upd23b_clinical_state_on_medication'])
@@ -893,7 +1019,7 @@ def run_eda():
         st.write('<hr>', unsafe_allow_html=True)
         submenu2_2()
         st.write('<hr>', unsafe_allow_html=True)
-        # submenu2_3()
+        submenu2_3()
         st.write('<hr>', unsafe_allow_html=True)
         submenu2_4()
 
