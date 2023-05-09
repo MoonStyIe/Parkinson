@@ -607,7 +607,7 @@ def protein_cv_1():
 
     fig = px.violin(protein_agg_top5, y='UniProt', x='CV_NPX[%]', color='UniProt',
                     box=True, title='<b>Coeffcient of Variation for NPX (Top 5)',
-                    width=800, height=600)
+                    width=700, height=600)
     fig.update_layout(template='plotly_dark',
                       showlegend=False,
                       xaxis=dict(title='Coeffcient of Variation [%] of NPX per patient_id',
@@ -669,7 +669,7 @@ def protein_cv_2():
             'font': dict(size=20, color='black', family="Arial")
         },
         showlegend=False,
-        width=800, height=2000
+        width=700, height=2000
     )
 
     st.plotly_chart(fig)
@@ -802,7 +802,7 @@ def generate_corr_heatmap_protein_clinical():
         },
         xaxis={'title': 'Uprdrs[1-4]', 'tickformat': '.2s'},
         yaxis={'title': 'UniProt', 'tickformat': '.2s'},
-        width=800, height=600,
+        width=700, height=600,
     )
 
     # 출력
@@ -878,7 +878,7 @@ def generate_corr_heatmap_peptides_clinical():
         },
         xaxis={'title': 'Uprdrs[1-4]', 'tickformat': '.2s'},
         yaxis={'title': 'UniProt', 'tickformat': '.2s'},
-        width=800, height=600,
+        width=700, height=600,
     )
 
     # 출력
@@ -887,6 +887,50 @@ def generate_corr_heatmap_peptides_clinical():
     st.markdown(":pencil: **Interpret:**\n" 
     "- The graph above shows only the top 5 correlation values of UniProt and UPDRS scores, expressed as hit meps. Proteins and peptides were merged with clinical data. The correlation coefficient of the top 5 UniProt had a **<span style='color:#F1C40F'>very weak negative relationship</span>**, and the rest of the UniProt had a very weak negative/positive relationship or almost no correlation.",
     unsafe_allow_html=True)
+
+def visualize_protein_correlation():
+    target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
+    target = target.rename(columns={'upd23b_clinical_state_on_medication':'medication'})
+    # Calculate coefficient of variation for NPX per UniProt
+    proteins_agg = train_proteins[['patient_id','UniProt','NPX']]
+    proteins_agg = proteins_agg.groupby(['patient_id','UniProt'])['NPX'].aggregate(['mean','std'])
+    proteins_agg['CV_NPX[%]'] = proteins_agg['std'] / proteins_agg['mean']*100
+    NPX_cv_mean = proteins_agg.groupby('UniProt')['CV_NPX[%]'].mean().reset_index()
+    NPX_cv_mean = NPX_cv_mean.sort_values(by='CV_NPX[%]', ascending=False).reset_index(drop=True)
+    protein_cv_top5 = NPX_cv_mean[:5]['UniProt']
+
+    num_protein_candidates = 5
+    protein_candidates = NPX_cv_mean.loc[:num_protein_candidates-1, 'UniProt']
+
+    # Create dataframe with columns:['visit_id', 'protein_candidata1', 'protein_candidata2', ...]
+    train_proteins_candidate_df = train_proteins.query(f'UniProt in @protein_candidates')
+    visit_ids = train_proteins['visit_id'].unique()
+    protein_dict_list = []
+    for visit_id in visit_ids:
+        proteins_df = train_proteins_candidate_df.query(f'visit_id=="{visit_id}"')
+        UniProts = proteins_df['UniProt'].values
+        NPXs = proteins_df['NPX'].values
+        protein_dict = dict(zip(protein_candidates, [np.nan]*num_protein_candidates))
+        for UniProt, NPX in zip(UniProts, NPXs):
+            protein_dict[UniProt] = NPX
+        protein_dict['visit_id'] = visit_id
+        protein_dict_list.append(protein_dict)
+
+    protein_candidate_df = pd.DataFrame(protein_dict_list)
+
+    # Concatenate train_clinical_df to protein_candidate_df
+    clinical_protein_df = pd.merge(target,
+                                   protein_candidate_df,
+                                   on='visit_id')
+
+    # Heatmap
+    clinical_protein_df_ = clinical_protein_df.drop(['visit_id', 'patient_id', 'visit_month', 'medication'], axis=1)
+    corr = clinical_protein_df_.corr()
+    fig = px.imshow(corr, width=700, height=600,
+                    title='<b>Correlation: UPDRS scores and Protein NPX</b>',
+                    x=list(corr.columns), y=list(corr.index))
+    fig.update_layout(title_x=0.3, title_y=0.95)
+    st.plotly_chart(fig)
 
 def submenu_1():
     target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
@@ -1048,12 +1092,15 @@ def submenu2_3():
         generate_corr_heatmap_peptides_clinical()
 
 def submenu2_4():
-    submenu = st.selectbox("⏏️ Protein CV", ['Protein CV', 'Protein CV & upd23b_clinical_state_on_medication'])
+    submenu = st.selectbox("⏏️ Protein CV", ['Protein CV', 'Protein CV & upd23b_clinical_state_on_medication', '막지었음'])
 
     if submenu == 'Protein CV':
         protein_cv_1()
     elif submenu == 'Protein CV & upd23b_clinical_state_on_medication':
         protein_cv_2()
+    elif submenu == '막지었음':
+        visualize_protein_correlation()
+
 
 def run_eda():
     st.markdown(
