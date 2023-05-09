@@ -390,57 +390,35 @@ def create_null_value_pie_charts_1():
 
     # pie 차트를 그리는 함수 정의
     def create_pie_chart(values, labels, title, rotation=0):
-        fig = go.Figure(data=[go.Pie(labels=labels, values=values, hole=.3, rotation=rotation)])
+        fig = go.Figure(data=[go.Pie(
+            labels=labels,
+            values=values,
+            hole=.3,
+            rotation=rotation,
+            sort=False,
+            hoverinfo='label+value+percent',
+            textinfo='label+percent',
+            marker=dict(
+                colors=sns.color_palette("Set2")[0:len(labels)],
+            ),
+            )])
         fig.update_layout(
-        title=title,
-        font=dict(size=16),
-        width=700,
-        height=500,
-        legend=dict(orientation="h")
+            title=title,
+            font=dict(
+                family="Arial, sans-serif",
+                size=16,
+                color="#7f7f7f"
+            ),
+            width=700,
+            height=500,
+            legend=dict(orientation="v", x=1.05, y=0.5),
+            title_x=0.5 # Add this line to center align the title
         )
         return fig
 
-    fig1 = create_pie_chart(values_train_clinical_data, labels_train_clinical_data,
-                            "Train Clinical Data Null Value Analysis", rotation=330)
-
-    fig1.update_layout(
-        title={
-            'text': "Train Clinical Data Null Value Analysis",
-            'y': 0.98,
-            'x': 0.5,
-            'xanchor': 'center',
-            'yanchor': 'top'},
-        margin=dict(t=50, b=0),
-        height=600,
-        width=800,
-        xaxis=dict(
-            showline=True,
-            showgrid=True,
-            showticklabels=False,
-            linecolor='rgb(204, 204, 204)',
-            linewidth=2,
-            ticks='outside',
-            tickfont=dict(
-                family='Arial',
-                size=12,
-                color='rgb(82, 82, 82)',
-            ),
-        ),
-        yaxis=dict(
-            showline=True,
-            showgrid=True,
-            showticklabels=False,
-            linecolor='rgb(204, 204, 204)',
-            linewidth=2,
-            ticks='outside',
-            tickfont=dict(
-                family='Arial',
-                size=12,
-                color='rgb(82, 82, 82)',
-            ),
-        )
-    )
-
+    st.title("Null Value Analysis")
+    st.subheader("Clinical Data")
+    fig1 = create_pie_chart(values_train_clinical_data, labels_train_clinical_data, "Train Clinical Data Null Value Analysis", rotation=330)
     st.plotly_chart(fig1)
 
 def create_null_value_pie_charts_2():
@@ -706,7 +684,7 @@ def plot_mean_updrs_scores_1():
     colors = ['#FF5733', '#C70039', '#900C3F', '#581845']
 
     fig, axs = plt.subplots(nrows=2, ncols=2, figsize=(12, 8))
-    fig.suptitle('Mean Updrs Score_1', fontsize=20, fontweight='bold', x=0.52, y=0.98)
+    fig.suptitle('Mean Updrs Score by Visit Month', fontsize=20, fontweight='bold', x=0.52, y=0.98)
     for i, ax in enumerate(axs.flatten()):
         sns.regplot(x=grouped_data.index, y=grouped_data.iloc[:, i], color=colors[i], ax=ax, label=f'UPDRS {i + 1}')
         target[f'updrs_{i + 1}'] = pd.to_numeric(target[f'updrs_{i + 1}'], errors='coerce')
@@ -725,7 +703,7 @@ def plot_mean_updrs_scores_2():
     colors = ['#FF5733', '#C70039', '#900C3F', '#581845']
 
     fig, axs = plt.subplots(nrows=2, ncols=2, figsize=(12, 8))
-    fig.suptitle('Mean Updrs Score_2', fontsize=20, fontweight='bold', x=0.52, y=0.98)
+    fig.suptitle('Mean Updrs Score by Visit Month', fontsize=20, fontweight='bold', x=0.52, y=0.98)
     for i, ax in enumerate(axs.flatten()):
         sns.regplot(x=grouped_data.index, y=grouped_data.iloc[:, i], color=colors[i], ax=ax, label=f'UPDRS {i + 1}')
         sup_target[f'updrs_{i + 1}'] = pd.to_numeric(sup_target[f'updrs_{i + 1}'], errors='coerce')
@@ -781,11 +759,11 @@ def submenu_1():
 
 
 def submenu_2():
-    submenu = st.selectbox("⏏️ Mean UDPRS Score", ['Mean_Updrs_Scores_1', 'Mean_Updrs_Scores_2'])
+    submenu = st.selectbox("⏏️ Mean UDPRS Score by Visit Month", ['Train Clinical Data', 'Supplemental Clinical Data'])
 
-    if submenu == 'Mean_Updrs_Scores_1':
+    if submenu == 'Train Clinical Data':
         plot_mean_updrs_scores_1()
-    elif submenu == 'Mean_Updrs_Scores_2':
+    elif submenu == 'Supplemental Clinical Data':
         plot_mean_updrs_scores_2()
 
 def submenu_3():
