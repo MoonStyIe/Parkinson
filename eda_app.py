@@ -647,7 +647,6 @@ def plot_mean_updrs_scores():
     fig.tight_layout()
     st.pyplot(fig)
 
-
 def plot_mean_updrs_scores_1():
     target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
     grouped_data = target[['visit_month', 'updrs_1', 'updrs_2', 'updrs_3', 'updrs_4']].apply(pd.to_numeric,
@@ -666,6 +665,9 @@ def plot_mean_updrs_scores_1():
     fig.tight_layout()
     st.pyplot(fig)
 
+    st.markdown(":pencil: **Interpret:**\n" 
+    "- The graph above shows the Mean UPDRS[1-4] scores are **<span style='color:#F1C40F'>increasing</span>** as visit mont progresses, and the data points are heavily clustered at the beginning of visit mont.",
+    unsafe_allow_html=True)
 
 def plot_mean_updrs_scores_2():
     target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
@@ -684,6 +686,10 @@ def plot_mean_updrs_scores_2():
         ax.legend()
     fig.tight_layout()
     st.pyplot(fig)
+
+    st.markdown(":pencil: **Interpret:**\n" 
+    "- In the chart above, the Clinical data shows that Mean UPDRS[1-4] is **<span style='color:#F1C40F'>increasing</span>** as the visit month passes, Supplimental Clinical data shows an increase in Mean UPDRS 1 and Mean UPDRS 2 only.",
+    unsafe_allow_html=True)
 
 def generate_corr_heatmap_protein_clinical():
     target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
@@ -757,6 +763,10 @@ def generate_corr_heatmap_protein_clinical():
     # 출력
     st.plotly_chart(fig)
 
+    st.markdown(":pencil: **Interpret:**\n" 
+    "- The graph above shows only the top 5 correlation values of UniProt and UPDRS scores, expressed as hit meps. Proteins and peptides were merged with clinical data. The correlation coefficient of the top 5 UniProt had a **<span style='color:#F1C40F'>very weak negative relationship</span>**, and the rest of the UniProt had a very weak negative/positive relationship or almost no correlation.",
+    unsafe_allow_html=True)
+
 def generate_corr_heatmap_peptides_clinical():
     target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
     merge_peptides_clinical = pd.merge(target, train_peptides, on=['patient_id', 'visit_month'])
@@ -828,6 +838,10 @@ def generate_corr_heatmap_peptides_clinical():
 
     # 출력
     st.plotly_chart(fig)
+
+    st.markdown(":pencil: **Interpret:**\n" 
+    "- The graph above shows only the top 5 correlation values of UniProt and UPDRS scores, expressed as hit meps. Proteins and peptides were merged with clinical data. The correlation coefficient of the top 5 UniProt had a **<span style='color:#F1C40F'>very weak negative relationship</span>**, and the rest of the UniProt had a very weak negative/positive relationship or almost no correlation.",
+    unsafe_allow_html=True)
 
 def submenu_1():
     target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
