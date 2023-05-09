@@ -628,6 +628,51 @@ def protein_cv_1():
     unsafe_allow_html=True)
 
 def protein_cv_2():
+    target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
+    target = target.rename(columns={'upd23b_clinical_state_on_medication': 'medication'})
+    # Calculate coefficient of variation for NPX per UniProt
+    proteins_agg = train_proteins[['patient_id', 'UniProt', 'NPX']]
+    proteins_agg = proteins_agg.groupby(['patient_id', 'UniProt'])['NPX'].aggregate(['mean', 'std'])
+    proteins_agg['CV_NPX[%]'] = proteins_agg['std'] / proteins_agg['mean'] * 100
+    NPX_cv_mean = proteins_agg.groupby('UniProt')['CV_NPX[%]'].mean().reset_index()
+    NPX_cv_mean = NPX_cv_mean.sort_values(by='CV_NPX[%]', ascending=False).reset_index(drop=True)
+    protein_cv_top5 = NPX_cv_mean[:5]['UniProt']
+
+    # Get data for top 5 UniProt with highest CV
+    protein_medication = pd.merge(train_proteins, target[['visit_id', 'medication']], on='visit_id', )
+    protein_medication['medication'] = protein_medication['medication'].fillna('Null')
+    protein_cv_top5 = NPX_cv_mean[:5]['UniProt'].reset_index(drop=True)
+    tmp = protein_medication[['visit_month', 'patient_id', 'UniProt', 'NPX', 'medication']]
+    top5_protein = tmp.query('UniProt in @protein_cv_top5')
+
+    # Create subplot figure for box plots
+    fig = make_subplots(rows=5, cols=2, horizontal_spacing=0.10, vertical_spacing=0.06,
+                        column_titles=['<b>Medication: On', '<b>Medication: Off of Null'],
+                        shared_yaxes=True)
+    for i, medication in enumerate([['On'], ['Off', 'Null']]):
+        top5_protein_df = top5_protein.query('medication in @medication')
+        for j, protein in enumerate(protein_cv_top5):
+            protein_df = top5_protein_df.query(f'UniProt=="{protein}"')
+            fig.add_trace(go.Box(x=protein_df['visit_month'], y=protein_df['NPX']),
+                          row=j + 1, col=i + 1)
+            fig.update_xaxes(title_text='Visit Month', row=j + 1, col=i + 1)
+            fig.update_yaxes(title_text=f'{protein} NPX', row=j + 1, col=1)
+
+    # Update layout and show plot
+    fig.update_layout(
+        title={
+            'text': "<b>NPX - Visit Month (Highset top5 CV)",
+            'y': 0.99,
+            'x': 0.5,
+            'xanchor': 'center',
+            'yanchor': 'top',
+            'font': dict(size=20, color='black', family="Arial")
+        },
+        showlegend=False,
+        width=800, height=2000
+    )
+
+    st.plotly_chart(fig)
 
     st.markdown(":pencil: **Interpret:**\n" 
     "- The top five protein coefficient of variation (CV) values and the number of visit months for patients based on whether they were taking medication or not. We don't know from this whether the top 5 protein CVs are correlated with the number of visits, but overall, people on medication have more visits than people off medication or unknown. people who were not on the drug or unknown.",
