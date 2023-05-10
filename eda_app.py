@@ -1,5 +1,4 @@
 # -*- coding:utf-8 -*-
-
 import matplotlib.pyplot as plt
 import seaborn as sns
 import plotly
@@ -974,6 +973,22 @@ def peptide_cv_1():
     fig.update_layout(title_x=0.2, title_y=0.9)
     st.plotly_chart(fig)
 
+    st.markdown(":pencil: **Interpret:**\n" 
+    "- Group by patient_id and peptide columns and get the mean and standard deviation of PeptideAbundance. Then use the standard deviation and mean value to get the coefficient of variation (CV) value. List only the top 5 peptide sequences with the highest CV values. The higher the value in the graph, the greater the abundance variation of the peptide.",
+    unsafe_allow_html=True)
+
+def peptide_cv_2():
+
+    st.markdown(":pencil: **Interpret:**\n" 
+    "- The top five peptide coefficient of variation (CV) values and the number of months of visits for patients based on whether they were taking medication. This doesn't tell us if the top 5 peptide CVs are correlated with the number of visits, but overall, we can see that people on medication have more visits than people who are not on medication or whose CVs are unknown.",
+    unsafe_allow_html=True)
+def peptide_cv_3():
+
+    st.markdown(":pencil: **Interpret:**\n" 
+    "- We correlated the UPDRS scores with the coefficient of variation (CV) of the peptides. As shown in the table, there is a correlation between the stages of the UPDRS, but not with the CV of the peptide. You can see that the correlation is mostly below 0.1 and has no effect.",
+    unsafe_allow_html=True)
+
+
 def submenu_1():
     target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
 
@@ -1143,17 +1158,15 @@ def submenu2_4():
     elif submenu == 'Correlation : UPDRS scores & Protein NPX':
         visualize_protein_correlation()
 
-# def submenu2_5():
-#     submenu = st.selectbox("⏏️ Peptide CV", ['???', '????', '?????'])
-#
-#     if submenu == '???':
-#         peptide_cv_1()
-#     elif submenu == '????':
-#         plot_mean_updrs_scores_2()
-#     elif submenu == '?????'
-#         asdfasdf()
+def submenu2_5():
+    submenu = st.selectbox("⏏️ Peptide CV", ['Peptde CV Top 5', 'Peptide Abundance & Visit Month (Top 5)', 'Correlation : UPDRS scores & Peptides Abundance'])
 
-
+    if submenu == 'Peptde CV Top 5':
+        peptide_cv_1()
+    elif submenu == 'Peptide Abundance & Visit Month (Top 5)':
+        peptide_cv_2()
+    elif submenu == 'Correlation : UPDRS scores & Peptides Abundance':
+        peptide_cv_3()
 
 def run_eda():
     st.markdown(
@@ -1182,7 +1195,7 @@ def run_eda():
         st.write('<hr>', unsafe_allow_html=True)
         submenu2_4()
         st.write('<hr>', unsafe_allow_html=True)
-        # submenu2_5()
+        submenu2_5()
 
 
 
