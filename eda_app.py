@@ -932,6 +932,48 @@ def visualize_protein_correlation():
     fig.update_layout(title_x=0.3, title_y=0.95)
     st.plotly_chart(fig)
 
+    st.markdown(":pencil: **Interpret:**\n" 
+    "- We checked the correlation between the UPDRS score and the coefficient of variation (CV) of protein. As shown in the table, there is a correlation between the stages of the UPDRS and the CV of protein.  You can see that the correlation is mostly below 0.2, which is not significant. In UniProt, we can see that P98160 and P30086 are weakly correlated.",
+    unsafe_allow_html=True)
+
+def peptide_cv_1():
+    target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
+    # Calculate the coefficient of variation (CV) for PeptideAbundance per patient_ids and Peptides
+    train_peptides_df_agg = train_peptides[['patient_id', 'Peptide', 'PeptideAbundance']]
+    train_peptides_df_agg = train_peptides_df_agg.groupby(['patient_id', 'Peptide'])['PeptideAbundance']\
+                            .aggregate(['mean', 'std'])
+    train_peptides_df_agg['CV_PeptideAbundance[%]'] = \
+        train_peptides_df_agg['std'] / train_peptides_df_agg['mean'] * 100
+    # Mean CV value of Peptides
+    abundance_cv_mean = train_peptides_df_agg.groupby('Peptide')['CV_PeptideAbundance[%]'].mean().reset_index()
+    abundance_cv_mean = abundance_cv_mean.sort_values(
+        by='CV_PeptideAbundance[%]', ascending=False).reset_index(drop=True)
+    peptide_cv_top5 = abundance_cv_mean[:5]['Peptide']
+
+    train_peptides_df_agg_top5 = train_peptides_df_agg.query('Peptide in @peptide_cv_top5').reset_index()
+    # Sort by peptide_cv_top5 rank
+    train_peptides_df_agg_top5['order'] = 0
+    for i, peptide in enumerate(peptide_cv_top5):
+        index = train_peptides_df_agg_top5.query(f'Peptide=="{peptide}"').index
+        train_peptides_df_agg_top5.loc[index, 'order'] = i
+    train_peptides_df_agg_top5.sort_values(by='order', inplace=True)
+
+    fig = px.violin(train_peptides_df_agg_top5,
+                    y='Peptide',
+                    x='CV_PeptideAbundance[%]',
+                    color='Peptide',
+                    box=True,
+                    title='<b>Coefficient of Variation (Top 5) of PeptideAbundance per patient_id</b>',
+                    width=700,
+                    height=600)
+    fig.update_layout(width=700,
+                      height=600,
+                      showlegend=False,
+                      xaxis=dict(title='Coefficient of variation [%] for PeptideAbundance per patient_id'),
+                      yaxis=dict(title='<b>Peptide</b>'))
+    fig.update_layout(title_x=0.2, title_y=0.9)
+    st.plotly_chart(fig)
+
 def submenu_1():
     target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
 
@@ -1092,14 +1134,25 @@ def submenu2_3():
         generate_corr_heatmap_peptides_clinical()
 
 def submenu2_4():
-    submenu = st.selectbox("⏏️ Protein CV", ['Protein CV', 'Protein CV & upd23b_clinical_state_on_medication', '막지었음'])
+    submenu = st.selectbox("⏏️ Protein CV", ['Protein CV Top 5', 'Protein NPX & Visit Month (Top 5)', 'Correlation : UPDRS scores & Protein NPX'])
 
-    if submenu == 'Protein CV':
+    if submenu == 'Protein CV Top 5':
         protein_cv_1()
-    elif submenu == 'Protein CV & upd23b_clinical_state_on_medication':
+    elif submenu == 'Protein NPX & Visit Month (Top 5)':
         protein_cv_2()
-    elif submenu == '막지었음':
+    elif submenu == 'Correlation : UPDRS scores & Protein NPX':
         visualize_protein_correlation()
+
+# def submenu2_5():
+#     submenu = st.selectbox("⏏️ Peptide CV", ['???', '????', '?????'])
+#
+#     if submenu == '???':
+#         peptide_cv_1()
+#     elif submenu == '????':
+#         plot_mean_updrs_scores_2()
+#     elif submenu == '?????'
+#         asdfasdf()
+
 
 
 def run_eda():
@@ -1128,8 +1181,8 @@ def run_eda():
         submenu2_3()
         st.write('<hr>', unsafe_allow_html=True)
         submenu2_4()
-
-
+        st.write('<hr>', unsafe_allow_html=True)
+        # submenu2_5()
 
 
 
