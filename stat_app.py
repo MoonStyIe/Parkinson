@@ -2,27 +2,92 @@
 import streamlit as st
 from PIL import Image
 
+def image_1():
+    image_1 = Image.open('img/updrs_1.png')
+
+    st.image(image_1)
+
+
+def image_2():
+    image_2 = Image.open('img/updrs_2.png')
+
+    st.image(image_2)
+
+
+def image_3():
+    image_3 = Image.open('img/updrs_3.png')
+
+    st.image(image_3)
+
+
+def image_4():
+    image_4 = Image.open('img/updrs_4.png')
+
+    st.image(image_4)
+
+def run_stat_box():
+    submenu = st.selectbox("⏏️ Correlation of visit_month-updrs score", ['UPDRS_1', 'UPDRS_2','UPDRS_3', 'UPDRS_4'])
+
+    if submenu == 'UPDRS_1':
+        image_1()
+    elif submenu == 'UPDRS_2':
+        image_2()
+    elif submenu == 'UPDRS_3':
+        image_3()
+    elif submenu == 'UPDRS_4':
+        image_4()
+
+def image_5():
+    image_5 = Image.open('img/metric_1.png')
+
+    st.image(image_5)
+
+    st.markdown(":pencil: **UPDRS_4 != 0:**\n"
+    "- The metric MAE, MSE, and R2 are not significantly affected by the value of  of Updrs_4.",
+    unsafe_allow_html=True)
+
+def image_6():
+    image_6 = Image.open('img/metric_2.png')
+
+    st.image(image_6)
+
+    st.markdown(":pencil: **UPDRS_4 = 0:**\n"
+    "- The metric SMAPE are significantly affected by the value of  of Updrs_4.",
+    unsafe_allow_html=True)
+
+def run_stat_box_2():
+    submenu = st.selectbox("⏏️ 4 Metrics", ['UPDRS_4 != 0', 'UPDRS_4 = 0'])
+
+    if submenu == 'UPDRS_4 != 0':
+        image_5()
+    elif submenu == 'UPDRS_4 = 0':
+        image_6()
+
 def run_status():
     st.markdown(
         "<h1 style='text-align: center; color: darkblue;'>Parkinson's </span><span style='text-align: center; color: darkmagenta;'>Stat</span>",
         unsafe_allow_html=True)
 
-    st.markdown("#### CatBoost \n"
-                "- CatBoost is a tree-based learning algorithm based on the Gradient Boosting framework, similar to LightGBM. It is designed to handle categorical features efficiently and has several unique features such as built-in handling of categorical variables, advanced handling of missing values, and support for training on GPU.\n",
-                unsafe_allow_html=True)
+    image = Image.open('img/ml_1.png')
+    st.image(image, caption='Mean of UPDRS')
 
     st.write('<hr>', unsafe_allow_html=True)
 
-    # st.markdown("#### Tree growth examples \n")
-    image = Image.open('data/catboost.png')
-    st.image(image, caption='Tree growth examples')
+    run_stat_box()
 
     st.write('<hr>', unsafe_allow_html=True)
 
-    st.markdown("#### $Key$_$parameters$ \n"
-                "- ***max_depth*** : The maximum depth of the trees in the ensemble (to handle model overfitting).\n"
-                "- ***num_leaves*** : The number of trees in the ensemble (similar to n_estimators in LightGBM). \n"
-                "- ***learning_rate*** : The step size at which boosting iterations are applied. \n"
-                "- ***l2_leaf_reg*** : L2 regularization coefficient. \n"
-                "- ***random_seed*** : Fixes the random seed for reproducibility. Please note that the parameter names and their specific meanings may vary between LightGBM and CatBoost. It's important to consult the CatBoost documentation for the precise parameter names and their effects. \n"
-                )
+    st.markdown("<h3 style='text-align: center; color: black;'> Correlation of Total data </span>",unsafe_allow_html=True)
+    image2 = Image.open('img/total.png')
+    st.image(image2)
+
+    st.write('<hr>', unsafe_allow_html=True)
+
+    run_stat_box_2()
+
+
+
+
+
+
+

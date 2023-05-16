@@ -8,6 +8,7 @@ from description import run_description
 from data import run_data
 from eda_app import run_eda
 from stat_app import run_status
+from stat_app import run_stat_box
 from ML import run_mls
 from ML import feautreImportancePlot
 from ML import run_model
