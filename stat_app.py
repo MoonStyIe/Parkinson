@@ -7,25 +7,22 @@ def run_status():
         "<h1 style='text-align: center; color: darkblue;'>Parkinson's </span><span style='text-align: center; color: darkmagenta;'>Stat</span>",
         unsafe_allow_html=True)
 
-    st.markdown("#### LightGBM \n"
-                "- ***LightGBM*** is a ***tree-based learning algorithm*** based on the Gradient Boosting framework. \n"
-                "- The difference with other existing tree-based algorithms is that the tree structure expands vertically compared to other tree-based algorithms that expand horizontally. \n"
-                "- In other words, ***Light GBM*** is ***leaf-wise*** while other algorithms are level-wise. \n")
+    st.markdown("#### CatBoost \n"
+                "- CatBoost is a tree-based learning algorithm based on the Gradient Boosting framework, similar to LightGBM. It is designed to handle categorical features efficiently and has several unique features such as built-in handling of categorical variables, advanced handling of missing values, and support for training on GPU.\n",
+                unsafe_allow_html=True)
 
     st.write('<hr>', unsafe_allow_html=True)
 
-    st.markdown("#### LightGBM implementation diagram \n")
-    image = Image.open('data/lightgbm.png')
-    st.image(image, caption=' leaf-wise growth of lightgbm')
+    # st.markdown("#### Tree growth examples \n")
+    image = Image.open('data/catboost.png')
+    st.image(image, caption='Tree growth examples')
 
     st.write('<hr>', unsafe_allow_html=True)
 
     st.markdown("#### $Key$_$parameters$ \n"
-                "- ***max_depth*** : the maximum depth of tree (handle model overfitting)\n"
-                "- ***num_leaves*** : number of leaves in full tree, default: 31 \n"
-                "- ***min_child_samples*** : the minimum number of data objects required to become a Leaf Node \n"
-                "- ***reg_alpha*** : L1 normalization factor \n"
-                "- ***reg_lambda*** : L2 normalization factor \n"
-                "- ***n_estimators*** : Number of trees, the higher the number, the higher the accuracy, but it takes longer \n"
-                "- ***random_state*** : fixes the result, same concept as Seed Number \n"
+                "- ***max_depth*** : The maximum depth of the trees in the ensemble (to handle model overfitting).\n"
+                "- ***num_leaves*** : The number of trees in the ensemble (similar to n_estimators in LightGBM). \n"
+                "- ***learning_rate*** : The step size at which boosting iterations are applied. \n"
+                "- ***l2_leaf_reg*** : L2 regularization coefficient. \n"
+                "- ***random_seed*** : Fixes the random seed for reproducibility. Please note that the parameter names and their specific meanings may vary between LightGBM and CatBoost. It's important to consult the CatBoost documentation for the precise parameter names and their effects. \n"
                 )
