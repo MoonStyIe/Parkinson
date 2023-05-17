@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://github.com/MoonStyIe/Parkinson/blob/56304841554daa2aa7859baae06f3b9c2301501c/img/kaggle.png"><br>
+  <img src="https://github.com/MoonStyIe/Parkinson/blob/7e282551b1cb4c5ff4a139b1e7bebb10e594a309/img/kaggle.png"><br>
 </div>
 
 -----------------
