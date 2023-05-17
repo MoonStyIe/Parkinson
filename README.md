@@ -12,24 +12,24 @@
 
 -----------------
 
-## 목적
+## 💡 목적
 파킨슨병 환자의 임상 데이터를 사용하여, 파킨슨병 환자의 진행을 측정하는 MDS-UPDRS(통합 파킨슨병 평가척도) 예측
 
-## 데이터
+## 📁 데이터
 캐글(Kaggle)의 AMP - Parkinson's Disease Progression Prediction 주제의 데이터를 사용
 (train_clinical_data.csv, supplemental_clinical_data.csv, train_peptides.csv, train_protein.csv)
 
-## ERD
+## 📊 ERD
 ![screensh](img/erd.png)
 
-## 팀 구성
+## 🧑‍🤝‍🧑 팀 구성
 - 사용언어 : Python 3.9.13v
 - 작업 툴 : google colab, pycharm, kaggle
 - 인원 : 6명
 - 주요 업무 : Streamlit 라이브러리를 이용한 웹개발 구현 코드 작성 및 머신러닝을 활용한 파킨슨 질병 진단 예측
 - 기간 : 2023-04-27 ~ 2023-05-16 
 
-## 주요 기능
+## 💻 주요 기능
 - ***홈페이지(Home)***
   + 대회목표 및 대회 개요
   
@@ -61,4 +61,27 @@
   + 모델 구축
   + 모델 성능 평가
 
+## 📥 설치 방법
+### Windows
+- 버전 확인
+  - VS Code : 
+  - Python : 3.10.10
+  - 라이브러리 : matplotlib(3.7.1), numpy(1.24.3), pandas(2.0.1), pingouin(0.5.3), plotly(5.14.1), plotly-express(0.4.1), scikit-learn(1.2.2), seaborn(0.12.2), statsmodels(0.13.5), streamlit(1.22.0), streamlit-option-menu(0.3.2), utils(1.0.1), xgboost(1.7.5)
 
+- 프로젝트 파일을 다운로드 받습니다.
+```
+git clone https://github.com/KingBeeM/storesales_streamlit_by_Kaggle.git
+```
+- 프로젝트 경로에서 가상환경 설치 후 접속합니다. (Windows 10 기준)
+```
+virtualenv venv
+source venv/Scripts/activate
+```
+- 라이브러리를 설치합니다.
+```
+pip install -r requirements.txt
+```
+- streamlit 명령어를 실행합니다.
+```
+streamlit run app.py
+```
