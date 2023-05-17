@@ -81,7 +81,7 @@ def run_status():
         st.markdown("<h4> ✔️ Therefore, the average for medication on and off is different.</h4>",unsafe_allow_html=True)
         st.write('<hr>', unsafe_allow_html=True)
         st.markdown("<h3 style='text-align: center; color: black;'> Analysis of Medication On/Off - Updrs score </span>",unsafe_allow_html=True)
-        image = Image.open('img/ml_1.png')
+        image = Image.open('img/ML_1.png')
         st.image(image, caption='Mean of UPDRS')
     elif submenu == 'Correlation Analysis':
         run_stat_box()
