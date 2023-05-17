@@ -64,7 +64,6 @@
 ## 📥 설치 방법
 ### Windows
 - 버전 확인
-  - VS Code : 
   - Python : 3.10.10
   - 라이브러리 : matplotlib(3.7.1), numpy(1.24.3), pandas(2.0.1), pingouin(0.5.3), plotly(5.14.1), plotly-express(0.4.1), scikit-learn(1.2.2), seaborn(0.12.2), statsmodels(0.13.5), streamlit(1.22.0), streamlit-option-menu(0.3.2), utils(1.0.1), xgboost(1.7.5)
 
