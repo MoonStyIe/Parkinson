@@ -73,7 +73,7 @@ def main():
         # Link
         c1, c2, c3 = st.columns(3)
         with c1:
-            st.info('**Data Analyst: [@Sung](https://muhanyuljung.tistory.com/)**', icon="💡")
+            st.info('**Data Analyst: [@MST](https://moonstyle1997.tistory.com/)**', icon="💡")
         with c2:
             st.info('**GitHub: [@MST](https://github.com/MoonStyIe/Parkinson)**', icon="💻")
         with c3:
