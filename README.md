@@ -4,10 +4,11 @@
 
 -----------------
 
-[대시보드 링크](https://moonstyie-parkinson-app-q81f6f.streamlit.app/#parkinson-s-description) <br/><br/>
-[발표 영상] <br/><br/>
-[데모 시연] <br/><br/>
-[포트폴리오](https://github.com/MoonStyIe/Parkinson/blob/9bed58006a8d646d4058b96eca4f8704263e94c2/pdf/2%EC%A1%B0_%ED%8C%8C%ED%82%A8%EC%8A%A8_%EC%A7%88%EB%B3%91_%EC%A7%84%EB%8B%A8%EC%98%88%EC%B8%A1.pdf)<br/><br/>
+[![Dashboard](https://img.shields.io/badge/Dashboard-Access-green.svg)](https://moonstyie-parkinson-app-q81f6f.streamlit.app/#parkinson-s-description)
+[![Presentation](https://img.shields.io/badge/Presentation-Access-green.svg)]
+[![Demo](https://img.shields.io/badge/Demo-Access-green.svg)]
+[![Portpolio](https://img.shields.io/badge/Portpolio-Access-green.svg)](https://github.com/MoonStyIe/Parkinson/blob/9bed58006a8d646d4058b96eca4f8704263e94c2/pdf/2%EC%A1%B0_%ED%8C%8C%ED%82%A8%EC%8A%A8_%EC%A7%88%EB%B3%91_%EC%A7%84%EB%8B%A8%EC%98%88%EC%B8%A1.pdf)
+
 [![screensh](img/홈페이지.png)](img/홈페이지.png)
 
 -----------------
@@ -64,7 +65,7 @@
 ## 📥 설치 방법
 ### Windows
 - 버전 확인
-  - Python : 3.10.10
+  - Python : 3.9.0
   - 라이브러리 : matplotlib(3.7.1), numpy(1.24.3), pandas(2.0.1), pingouin(0.5.3), plotly(5.14.1), plotly-express(0.4.1), scikit-learn(1.2.2), seaborn(0.12.2), statsmodels(0.13.5), streamlit(1.22.0), streamlit-option-menu(0.3.2), utils(1.0.1), xgboost(1.7.5)
 
 - 프로젝트 파일을 다운로드 받습니다.
