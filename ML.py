@@ -143,9 +143,13 @@ def run_mls():
                 "- Peptide Data : 69.5638 ",
                 unsafe_allow_html=True)
     st.markdown("**When checking the SMAPE metrics medication status has the most impact on the model's performance on the performance of the model.**",unsafe_allow_html=True)
-
-
-
+    st.write('<hr>', unsafe_allow_html=True)
+    image1 = Image.open('img/lank.png')
+    st.image(image1)
+    st.markdown("<h3 style='text-align: center; color: darkblue;'>✔️ Final Score </span>", unsafe_allow_html=True)
+    st.markdown("- **Final score = 56.0**\n"
+                "- **450th out of 1,788 teams**\n"
+                "- **Top 25% of teams**\n", unsafe_allow_html=True)
 def feautreImportancePlot(model, X_train):
     # Get the best model from the search
     model = model.best_estimator_
